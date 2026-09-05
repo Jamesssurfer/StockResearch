@@ -1,0 +1,132 @@
+/* Additional styles for OHLC and Charts */
+
+.ohlc-container {
+    background: var(--background);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.ohlc-container h3 {
+    margin-bottom: 16px;
+    color: var(--text);
+    font-size: 16px;
+}
+
+.ohlc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+}
+
+.ohlc-item {
+    text-align: center;
+}
+
+.ohlc-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ohlc-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.ohlc-value.high {
+    color: var(--success);
+}
+
+.ohlc-value.low {
+    color: var(--danger);
+}
+
+.charts-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 24px 0;
+}
+
+.chart-wrapper {
+    background: var(--background);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    height: 300px;
+}
+
+.chart-wrapper h3 {
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.chart-wrapper canvas {
+    max-height: 220px;
+    width: 100% !important;
+}
+
+.watchlist-action {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.watchlist-btn {
+    padding: 12px 24px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.watchlist-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.watchlist-btn.active {
+    background: var(--success);
+}
+
+.watchlist-btn.active:hover {
+    background: #059669;
+}
+
+.stock-exchange {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-left: 8px;
+}
+
+.last-updated {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 4px;
+}
+
+.stock-price-container {
+    text-align: right;
+}
+
+/* Mobile responsiveness for charts */
+@media (max-width: 768px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .ohlc-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
