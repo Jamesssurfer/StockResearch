@@ -3,19 +3,19 @@ class StaticStockAnalyzer {
         this.currentStock = null;
         this.watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
         this.availableStocks = [];
-        this.masterData = null;
+        this.masterData = null; // now sourced from data/manifest.json, not master_data.csv
         this.init();
     }
 
     async init() {
         this.setupEventListeners();
         this.renderWatchlist();
-        await this.loadMasterData();
+        await this.loadManifest();
     }
 
     setupEventListeners() {
         const searchInput = document.getElementById('searchInput');
-        
+
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.loadStaticData();
@@ -30,48 +30,44 @@ class StaticStockAnalyzer {
         }
     }
 
-    async loadMasterData() {
+    // Replaces the old loadMasterData() that read data/master_data.csv.
+    // A static site can't list a directory over HTTP, so a manifest is the
+    // only way to know which symbols exist and to bulk-populate watchlist
+    // prices without opening every workbook up front.
+    async loadManifest() {
         try {
-            const response = await fetch('data/master_data.csv');
+            const response = await fetch('data/manifest.json');
             if (!response.ok) {
-                console.log('No master data file found');
+                console.log('No manifest.json found');
                 return;
             }
-            
-            const csvText = await response.text();
-            this.masterData = this.parseCSV(csvText);
-            
-            // Update available stocks
+
+            this.masterData = await response.json();
             this.availableStocks = this.masterData.map(row => row.symbol);
             this.renderAvailableStocks();
-            
-            // Update watchlist prices
             this.updateWatchlistPrices();
-            
+
         } catch (error) {
-            console.log('Error loading master data:', error);
+            console.log('Error loading manifest:', error);
         }
     }
 
-    parseCSV(csvText) {
-        const lines = csvText.split('\n');
-        const headers = lines[0].split(',');
-        const result = [];
-        
-        for (let i = 1; i < lines.length; i++) {
-            if (lines[i].trim() === '') continue;
-            
-            const values = lines[i].split(',');
-            const obj = {};
-            
-            headers.forEach((header, index) => {
-                obj[header.trim()] = values[index]?.trim() || '';
-            });
-            
-            result.push(obj);
+    // Fetches one symbol's workbook and returns it parsed via SheetJS.
+    async fetchWorkbook(symbol) {
+        const response = await fetch(`data/${symbol}_data.xlsx`);
+        if (!response.ok) {
+            throw new Error(`No data found for ${symbol}`);
         }
-        
-        return result;
+        const arrayBuffer = await response.arrayBuffer();
+        return XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+    }
+
+    // Reads one sheet out of a parsed workbook as an array of row objects.
+    // Returns [] if the sheet doesn't exist (e.g. a symbol with no earnings data).
+    sheetToRows(workbook, sheetName) {
+        const sheet = workbook.Sheets[sheetName];
+        if (!sheet) return [];
+        return XLSX.utils.sheet_to_json(sheet, { defval: '' });
     }
 
     async loadStaticData() {
@@ -82,71 +78,66 @@ class StaticStockAnalyzer {
         }
 
         try {
-            // Load metrics data
-            const metricsResponse = await fetch(`data/${symbol}_metrics.csv`);
-            if (!metricsResponse.ok) {
-                throw new Error(`No data found for ${symbol}`);
+            const workbook = await this.fetchWorkbook(symbol);
+
+            const metricsRows = this.sheetToRows(workbook, 'Metrics');
+            if (!metricsRows.length) {
+                throw new Error(`No metrics found for ${symbol}`);
             }
-            
-            const metricsText = await metricsResponse.text();
-            const metrics = this.parseCSV(metricsText)[0];
-            
-            // Load historical data
-            const historyResponse = await fetch(`data/${symbol}_history.csv`);
-            if (!historyResponse.ok) {
+            const metrics = metricsRows[0];
+
+            const historicalData = this.sheetToRows(workbook, 'Price_History');
+            if (!historicalData.length) {
                 throw new Error(`No historical data found for ${symbol}`);
             }
-            
-            const historyText = await historyResponse.text();
-            const historicalData = this.parseCSV(historyText);
-            
+
             this.currentStock = {
                 symbol: symbol,
                 metrics: metrics,
                 historicalData: historicalData
             };
-            
+
             this.displayStockData();
-            
+
         } catch (error) {
             console.error('Error loading data:', error);
-            alert(`Unable to load data for ${symbol}. Make sure the data files exist.`);
+            alert(`Unable to load data for ${symbol}. Make sure ${symbol}_data.xlsx exists in data/.`);
         }
     }
 
     displayStockData() {
         const overview = document.getElementById('stockOverview');
         overview.classList.remove('hidden');
-        
+
         const stock = this.currentStock;
         const metrics = stock.metrics;
-        
+
         // Display OHLC and price data
         document.getElementById('stockName').textContent = metrics.symbol;
         document.getElementById('stockSymbol').textContent = metrics.symbol;
         document.getElementById('currentPrice').textContent = `$${parseFloat(metrics.current_price).toFixed(2)}`;
-        
-        const change = metrics.current_price - metrics.previous_close;
-        const changePercent = (change / metrics.previous_close) * 100;
-        
-        document.getElementById('priceChange').textContent = 
+
+        const change = parseFloat(metrics.current_price) - parseFloat(metrics.previous_close);
+        const changePercent = (change / parseFloat(metrics.previous_close)) * 100;
+
+        document.getElementById('priceChange').textContent =
             `${change >= 0 ? '+' : ''}${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
-        document.getElementById('priceChange').className = 
+        document.getElementById('priceChange').className =
             `price-change ${change >= 0 ? 'positive' : 'negative'}`;
-        
+
         // Display OHLC
         document.getElementById('openPrice').textContent = `$${parseFloat(metrics.open).toFixed(2)}`;
         document.getElementById('highPrice').textContent = `$${parseFloat(metrics.day_high).toFixed(2)}`;
         document.getElementById('lowPrice').textContent = `$${parseFloat(metrics.day_low).toFixed(2)}`;
         document.getElementById('prevClosePrice').textContent = `$${parseFloat(metrics.previous_close).toFixed(2)}`;
         document.getElementById('volumeData').textContent = this.formatVolume(metrics.volume);
-        
+
         // Display quick stats
         this.displayQuickStats(metrics);
-        
+
         // Display charts
         this.displayCharts(stock.historicalData);
-        
+
         // Display framework placeholder
         document.getElementById('frameworkContent').innerHTML = `
             <div class="verdict neutral">
@@ -186,7 +177,7 @@ class StaticStockAnalyzer {
             </div>
             <div class="stat-card">
                 <div class="stat-label">Dividend Yield</div>
-                <div class="stat-value">${metrics.dividend_yield ? (metrics.dividend_yield * 100).toFixed(2) + '%' : 'N/A'}</div>
+                <div class="stat-value">${this.formatPercentFromFraction(metrics.dividend_yield)}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Profit Margin</div>
@@ -196,15 +187,16 @@ class StaticStockAnalyzer {
     }
 
     displayCharts(historicalData) {
-        // Prepare data for charts
+        // Prepare data for charts. Date comes back as a JS Date object (cellDates: true)
+        // when the source cell was a real Excel date, or a string/number otherwise.
         const labels = historicalData.map(row => {
-            const date = new Date(row.Date);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const dateVal = row.Date instanceof Date ? row.Date : new Date(row.Date);
+            return dateVal.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         });
-        
+
         const prices = historicalData.map(row => parseFloat(row.Close));
         const volumes = historicalData.map(row => parseFloat(row.Volume));
-        
+
         // Create price chart
         const priceCtx = document.getElementById('priceChart').getContext('2d');
         new Chart(priceCtx, {
@@ -228,7 +220,7 @@ class StaticStockAnalyzer {
                 plugins: { legend: { display: false } }
             }
         });
-        
+
         // Create volume chart
         const volumeCtx = document.getElementById('volumeChart').getContext('2d');
         new Chart(volumeCtx, {
@@ -252,7 +244,7 @@ class StaticStockAnalyzer {
     renderAvailableStocks() {
         const container = document.getElementById('availableStocks');
         if (!container) return;
-        
+
         container.innerHTML = this.availableStocks.map(symbol => `
             <div class="stock-chip" onclick="analyzer.quickLoad('${symbol}')">
                 ${symbol}
@@ -268,27 +260,27 @@ class StaticStockAnalyzer {
     renderWatchlist() {
         const container = document.getElementById('watchlistItems');
         const count = document.getElementById('watchlistCount');
-        
+
         count.textContent = this.watchlist.length;
-        
+
         if (this.watchlist.length === 0) {
             container.innerHTML = '<p class="empty-watchlist">No stocks in watchlist</p>';
             return;
         }
-        
+
         container.innerHTML = this.watchlist.map(symbol => `
             <div class="watchlist-item" onclick="analyzer.quickLoad('${symbol}')">
                 <span class="symbol">${symbol}</span>
                 <span class="price" id="watch-${symbol}">---</span>
             </div>
         `).join('');
-        
+
         this.updateWatchlistPrices();
     }
 
     updateWatchlistPrices() {
         if (!this.masterData) return;
-        
+
         this.watchlist.forEach(symbol => {
             const data = this.masterData.find(row => row.symbol === symbol);
             if (data) {
@@ -303,6 +295,7 @@ class StaticStockAnalyzer {
     formatMarketCap(value) {
         if (!value || value === 'N/A') return 'N/A';
         const num = parseFloat(value);
+        if (isNaN(num)) return 'N/A';
         if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
         if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
         if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
@@ -312,10 +305,17 @@ class StaticStockAnalyzer {
     formatVolume(value) {
         if (!value || value === 'N/A') return 'N/A';
         const num = parseFloat(value);
+        if (isNaN(num)) return 'N/A';
         if (num >= 1e9) return `${(num / 1e9).toFixed(2)}B`;
         if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`;
         if (num >= 1e3) return `${(num / 1e3).toFixed(2)}K`;
         return num.toString();
+    }
+
+    formatPercentFromFraction(value) {
+        const num = parseFloat(value);
+        if (isNaN(num)) return 'N/A';
+        return `${(num * 100).toFixed(2)}%`;
     }
 }
 
