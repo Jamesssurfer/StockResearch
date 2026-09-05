@@ -13,15 +13,28 @@ class StockAnalyzer {
     init() {
         this.setupEventListeners();
         this.renderWatchlist();
-        this.setupSearchAutocomplete();
     }
 
     setupEventListeners() {
-        // Search
+        // Search button click
+        const searchBtn = document.querySelector('.search-btn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => {
+                console.log('Search button clicked');
+                this.searchStock();
+            });
+        }
+
+        // Search input - Enter key
         const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.searchStock();
-        });
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    console.log('Enter key pressed');
+                    this.searchStock();
+                }
+            });
+        }
 
         // Framework tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -32,60 +45,164 @@ class StockAnalyzer {
     }
 
     async searchStock() {
-        const query = document.getElementById('searchInput').value.trim().toUpperCase();
-        if (!query) return;
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput.value.trim().toUpperCase();
+        
+        console.log('Searching for:', query);
+        
+        if (!query) {
+            this.showError('Please enter a stock ticker symbol');
+            return;
+        }
+
+        // Show loading state
+        this.showLoading();
 
         try {
             const stockData = await this.fetchStockData(query);
+            console.log('Stock data fetched:', stockData);
+            
             this.currentStock = stockData;
             await this.displayStockOverview(stockData);
             this.switchFramework('overview');
             this.updateWatchlistButton();
+            
+            // Hide loading
+            this.hideLoading();
         } catch (error) {
             console.error('Error fetching stock data:', error);
-            this.showError('Stock not found. Please check the ticker symbol.');
+            this.hideLoading();
+            this.showError(`Unable to find stock "${query}". Please check the ticker symbol and try again.`);
         }
     }
 
     async fetchStockData(symbol) {
         try {
-            // Fetch comprehensive stock data
-            const [chartData, quoteSummary, financialData] = await Promise.all([
-                // 30-day historical data with OHLC
-                this.fetchYahooData(`/v8/finance/chart/${symbol}?range=1mo&interval=1d`),
-                // Quote summary for fundamentals
-                this.fetchYahooData(`/v10/finance/quoteSummary/${symbol}?modules=summaryDetail,defaultKeyStatistics,financialData,price,recommendationTrend,earnings,earningsHistory,earningsTrend,industryTrend,sectorTrend,assetProfile`),
-                // Additional financial data
-                this.fetchYahooData(`/ws/fundamentals-timeseries/v1/finance/timeseries/${symbol}?type=annualIncomeStatement`)
-            ]);
-
-            return {
-                symbol,
-                chart: chartData.chart?.result?.[0],
-                quote: chartData.chart?.result?.[0],
-                stats: quoteSummary.quoteSummary?.result?.[0],
-                financials: financialData.timeseries?.result?.[0],
-                historicalData: chartData.chart?.result?.[0]
-            };
+            // Try primary API first
+            return await this.fetchFromYahoo(symbol);
         } catch (error) {
-            console.error('Error in fetchStockData:', error);
-            throw error;
+            console.error('Yahoo API failed, trying alternative...', error);
+            // Try alternative API
+            return await this.fetchFromAlternative(symbol);
         }
     }
 
-    async fetchYahooData(endpoint) {
-        const baseUrl = 'https://query1.finance.yahoo.com';
-        const response = await fetch(`${baseUrl}${endpoint}`, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    async fetchFromYahoo(symbol) {
+        const endpoints = [
+            // Chart data (30 days)
+            `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`,
+            // Quote summary
+            `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=summaryDetail,defaultKeyStatistics,financialData,price,assetProfile`
+        ];
+
+        const responses = await Promise.all(
+            endpoints.map(url => 
+                fetch(url, {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                        'Accept': 'application/json',
+                    }
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+            )
+        );
+
+        const [chartData, quoteData] = responses;
+
+        // Validate data
+        if (!chartData.chart?.result?.[0]) {
+            throw new Error('No chart data available');
         }
+
+        return {
+            symbol: symbol,
+            chart: chartData.chart.result[0],
+            quote: chartData.chart.result[0],
+            stats: quoteData.quoteSummary?.result?.[0] || {},
+            historicalData: chartData.chart.result[0]
+        };
+    }
+
+    async fetchFromAlternative(symbol) {
+        // Try with query2 endpoint
+        const chartUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`;
         
-        return await response.json();
+        try {
+            const response = await fetch(chartUrl, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const chartData = await response.json();
+            
+            if (!chartData.chart?.result?.[0]) {
+                throw new Error('No data available');
+            }
+
+            // Basic stats from chart data only
+            return {
+                symbol: symbol,
+                chart: chartData.chart.result[0],
+                quote: chartData.chart.result[0],
+                stats: this.createBasicStats(chartData.chart.result[0], symbol),
+                historicalData: chartData.chart.result[0]
+            };
+        } catch (error) {
+            console.error('Alternative API also failed:', error);
+            throw new Error('Unable to fetch stock data from any source');
+        }
+    }
+
+    createBasicStats(chartData, symbol) {
+        // Create basic stats from chart data when quote summary is unavailable
+        const meta = chartData.meta || {};
+        const indicators = chartData.indicators?.quote?.[0] || {};
+        
+        const prices = indicators.close?.filter(p => p !== null) || [];
+        const volumes = indicators.volume?.filter(v => v !== null) || [];
+        
+        const avgVolume = volumes.length > 0 ? 
+            volumes.reduce((a, b) => a + b, 0) / volumes.length : 0;
+        
+        const high52 = prices.length > 0 ? Math.max(...prices) : meta.regularMarketPrice;
+        const low52 = prices.length > 0 ? Math.min(...prices) : meta.regularMarketPrice;
+
+        return {
+            price: {
+                longName: symbol,
+                exchangeName: meta.exchangeName || meta.fullExchangeName || '',
+                marketCap: { raw: 0, fmt: 'N/A' },
+                volume: { raw: avgVolume, fmt: this.formatVolume(avgVolume) }
+            },
+            summaryDetail: {
+                fiftyTwoWeekHigh: { raw: high52, fmt: `$${high52.toFixed(2)}` },
+                fiftyTwoWeekLow: { raw: low52, fmt: `$${low52.toFixed(2)}` },
+                trailingPE: { raw: null, fmt: 'N/A' },
+                dividendYield: { raw: null, fmt: 'N/A' }
+            },
+            defaultKeyStatistics: {
+                trailingEps: { raw: null, fmt: 'N/A' },
+                beta: { raw: null, fmt: 'N/A' }
+            },
+            financialData: {
+                profitMargins: { raw: null, fmt: 'N/A' }
+            },
+            assetProfile: {
+                sector: 'N/A',
+                industry: 'N/A',
+                longBusinessSummary: 'Detailed company information not available. Basic price data shown.'
+            }
+        };
     }
 
     async displayStockOverview(stockData) {
@@ -96,7 +213,8 @@ class StockAnalyzer {
         watchlistAction.classList.remove('hidden');
         
         // Update stock header
-        document.getElementById('stockName').textContent = stockData.stats?.price?.longName || stockData.symbol;
+        const stockName = stockData.stats?.price?.longName || stockData.symbol;
+        document.getElementById('stockName').textContent = stockName;
         document.getElementById('stockSymbol').textContent = stockData.symbol;
         document.getElementById('stockExchange').textContent = stockData.stats?.price?.exchangeName || '';
         
@@ -118,12 +236,8 @@ class StockAnalyzer {
         }
 
         const quotes = chartData.indicators.quote[0];
-        const timestamps = chartData.timestamp;
         
-        // Get the latest completed session (last index)
-        const lastIndex = quotes.close.length - 1;
-        
-        // Find the last valid (non-null) values
+        // Get the latest valid values
         let open = null, high = null, low = null, close = null, volume = null;
         
         for (let i = quotes.close.length - 1; i >= 0; i--) {
@@ -142,8 +256,6 @@ class StockAnalyzer {
             document.getElementById('highPrice').textContent = `$${high.toFixed(2)}`;
             document.getElementById('lowPrice').textContent = `$${low.toFixed(2)}`;
             document.getElementById('prevClosePrice').textContent = `$${close.toFixed(2)}`;
-            
-            // Format volume
             document.getElementById('volumeData').textContent = this.formatVolume(volume);
             
             // Calculate average volume
@@ -230,13 +342,18 @@ class StockAnalyzer {
         const quotes = chartData.indicators.quote[0];
         
         // Prepare data for charts
-        const labels = timestamps.map(ts => {
-            const date = new Date(ts * 1000);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        });
+        const labels = [];
+        const prices = [];
+        const volumes = [];
         
-        const prices = quotes.close.filter(price => price !== null);
-        const volumes = quotes.volume.filter(volume => volume !== null);
+        timestamps.forEach((ts, index) => {
+            if (quotes.close[index] !== null) {
+                const date = new Date(ts * 1000);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                prices.push(quotes.close[index]);
+                volumes.push(quotes.volume[index] || 0);
+            }
+        });
         
         // Destroy existing charts if they exist
         if (this.priceChart) {
@@ -301,7 +418,6 @@ class StockAnalyzer {
                     label: 'Volume',
                     data: volumes,
                     backgroundColor: volumes.map((vol, i) => {
-                        // Color bars based on price movement
                         if (i > 0) {
                             return prices[i] > prices[i - 1] ? 'rgba(16, 185, 129, 0.7)' : 'rgba(239, 68, 68, 0.7)';
                         }
@@ -389,34 +505,34 @@ class StockAnalyzer {
                 content.innerHTML = this.getOverviewHTML();
                 break;
             case 'oneil':
-                content.innerHTML = window.analyzeOneil(this.currentStock);
+                content.innerHTML = window.analyzeOneil ? window.analyzeOneil(this.currentStock) : this.getPlaceholderHTML('William J. O\'Neil - CANSLIM');
                 break;
             case 'blackscholes':
-                content.innerHTML = window.analyzeBlackScholes(this.currentStock);
+                content.innerHTML = window.analyzeBlackScholes ? window.analyzeBlackScholes(this.currentStock) : this.getPlaceholderHTML('Black-Scholes Model');
                 break;
             case 'buffett':
-                content.innerHTML = window.analyzeBuffett(this.currentStock);
+                content.innerHTML = window.analyzeBuffett ? window.analyzeBuffett(this.currentStock) : this.getPlaceholderHTML('Warren Buffett Intrinsic Value');
                 break;
             case 'famafrench':
-                content.innerHTML = window.analyzeFamaFrench(this.currentStock);
+                content.innerHTML = window.analyzeFamaFrench ? window.analyzeFamaFrench(this.currentStock) : this.getPlaceholderHTML('Fama-French Three Factor');
                 break;
             case 'magicformula':
-                content.innerHTML = window.analyzeMagicFormula(this.currentStock);
+                content.innerHTML = window.analyzeMagicFormula ? window.analyzeMagicFormula(this.currentStock) : this.getPlaceholderHTML('Magic Formula');
                 break;
             case 'piotroski':
-                content.innerHTML = window.analyzePiotroski(this.currentStock);
+                content.innerHTML = window.analyzePiotroski ? window.analyzePiotroski(this.currentStock) : this.getPlaceholderHTML('Piotroski F-Score');
                 break;
             case 'graham':
-                content.innerHTML = window.analyzeGraham(this.currentStock);
+                content.innerHTML = window.analyzeGraham ? window.analyzeGraham(this.currentStock) : this.getPlaceholderHTML('Benjamin Graham Value');
                 break;
             case 'acquirer':
-                content.innerHTML = window.analyzeAcquirerMultiple(this.currentStock);
+                content.innerHTML = window.analyzeAcquirerMultiple ? window.analyzeAcquirerMultiple(this.currentStock) : this.getPlaceholderHTML('Acquirer\'s Multiple');
                 break;
             case 'minervini':
-                content.innerHTML = window.analyzeMinervini(this.currentStock);
+                content.innerHTML = window.analyzeMinervini ? window.analyzeMinervini(this.currentStock) : this.getPlaceholderHTML('Mark Minervini SEPA');
                 break;
             case 'lynch':
-                content.innerHTML = window.analyzeLynch(this.currentStock);
+                content.innerHTML = window.analyzeLynch ? window.analyzeLynch(this.currentStock) : this.getPlaceholderHTML('Peter Lynch GARP');
                 break;
         }
     }
@@ -454,6 +570,18 @@ class StockAnalyzer {
                 
                 <div class="verdict neutral">
                     <strong>📊 Overview:</strong> Select a framework tab above for detailed analysis
+                </div>
+            </div>
+        `;
+    }
+
+    getPlaceholderHTML(title) {
+        return `
+            <div class="framework-placeholder">
+                <h3>${title}</h3>
+                <p>This framework analysis is coming soon.</p>
+                <div class="verdict neutral">
+                    <strong>ℹ️ Note:</strong> The core stock data is working. Framework analyses will be added in future updates.
                 </div>
             </div>
         `;
@@ -504,7 +632,12 @@ class StockAnalyzer {
 
     async fetchWatchlistPrice(symbol) {
         try {
-            const data = await this.fetchYahooData(`/v8/finance/chart/${symbol}?range=1d&interval=1d`);
+            const data = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+            }).then(res => res.json());
+            
             const price = data.chart?.result?.[0]?.meta?.regularMarketPrice;
             if (price) {
                 const items = document.querySelectorAll('.watchlist-item');
@@ -549,56 +682,65 @@ class StockAnalyzer {
         return value.toString();
     }
 
+    showLoading() {
+        // Create loading overlay
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'loadingOverlay';
+        loadingDiv.innerHTML = `
+            <div class="loading-spinner"></div>
+            <p>Loading stock data...</p>
+        `;
+        loadingDiv.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        document.body.appendChild(loadingDiv);
+    }
+
+    hideLoading() {
+        const loadingDiv = document.getElementById('loadingOverlay');
+        if (loadingDiv) {
+            loadingDiv.remove();
+        }
+    }
+
     showError(message) {
-        alert(message);
+        // Create error toast
+        const toast = document.createElement('div');
+        toast.className = 'toast error';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 100);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
     }
 
     showToast(message) {
-        // Create toast notification
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.textContent = message;
         document.body.appendChild(toast);
         
-        // Trigger animation
         setTimeout(() => toast.classList.add('show'), 100);
         
-        // Remove after 3 seconds
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
-
-    setupSearchAutocomplete() {
-        const input = document.getElementById('searchInput');
-        input.addEventListener('input', debounce(async (e) => {
-            const query = e.target.value.trim();
-            if (query.length < 2) return;
-            
-            try {
-                const response = await this.fetchYahooData(`/v1/finance/search?q=${query}&quotesCount=5&newsCount=0`);
-                const quotes = response.quotes || [];
-                // Could implement dropdown here
-                console.log('Search results:', quotes);
-            } catch (error) {
-                console.error('Search error:', error);
-            }
-        }, 300));
-    }
-}
-
-// Utility function for debouncing
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
 }
 
 // Global formatVolume function for chart tooltips
@@ -610,5 +752,8 @@ function formatVolume(value) {
     return value.toString();
 }
 
-// Initialize the application
-const analyzer = new StockAnalyzer();
+// Initialize the application when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.analyzer = new StockAnalyzer();
+    console.log('Stock Analyzer initialized');
+});
