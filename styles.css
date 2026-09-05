@@ -151,3 +151,43 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Loading Spinner */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error Toast */
+.toast.error {
+    background: #ef4444;
+}
+
+/* Framework Placeholder */
+.framework-placeholder {
+    padding: 40px;
+    text-align: center;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.framework-placeholder h3 {
+    margin-bottom: 16px;
+    color: #1e293b;
+}
+
+.framework-placeholder p {
+    color: #64748b;
+    margin-bottom: 20px;
+}
