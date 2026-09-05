@@ -6,7 +6,6 @@ class StockAnalyzer {
         this.currentFramework = 'overview';
         this.priceChart = null;
         this.volumeChart = null;
-        this.historicalData = null;
         this.init();
     }
 
@@ -60,111 +59,113 @@ class StockAnalyzer {
 
         try {
             const stockData = await this.fetchStockData(query);
-            console.log('Stock data fetched:', stockData);
+            console.log('Stock data fetched successfully:', stockData);
             
             this.currentStock = stockData;
             await this.displayStockOverview(stockData);
             this.switchFramework('overview');
             this.updateWatchlistButton();
             
-            // Hide loading
             this.hideLoading();
         } catch (error) {
             console.error('Error fetching stock data:', error);
             this.hideLoading();
-            this.showError(`Unable to find stock "${query}". Please check the ticker symbol and try again.`);
+            this.showError(`Unable to find stock "${query}". Error: ${error.message}`);
         }
     }
 
     async fetchStockData(symbol) {
-        try {
-            // Try primary API first
-            return await this.fetchFromYahoo(symbol);
-        } catch (error) {
-            console.error('Yahoo API failed, trying alternative...', error);
-            // Try alternative API
-            return await this.fetchFromAlternative(symbol);
-        }
-    }
-
-    async fetchFromYahoo(symbol) {
-        const endpoints = [
-            // Chart data (30 days)
+        // Use multiple CORS proxies and data sources
+        const proxies = [
+            // AllOrigins proxy
+            `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`)}`,
+            // CORS Anywhere proxy
+            `https://cors-anywhere.herokuapp.com/https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`,
+            // Direct attempt
             `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`,
-            // Quote summary
-            `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=summaryDetail,defaultKeyStatistics,financialData,price,assetProfile`
+            // Alternative Yahoo endpoint
+            `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`
         ];
 
-        const responses = await Promise.all(
-            endpoints.map(url => 
-                fetch(url, {
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                        'Accept': 'application/json',
-                    }
-                }).then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-            )
-        );
+        let chartData = null;
+        let lastError = null;
 
-        const [chartData, quoteData] = responses;
+        // Try each proxy/direct URL
+        for (const url of proxies) {
+            try {
+                console.log('Trying URL:', url);
+                const response = await this.fetchWithTimeout(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                if (data.chart?.result?.[0]) {
+                    chartData = data.chart.result[0];
+                    console.log('Successfully fetched chart data from:', url);
+                    break;
+                }
+            } catch (error) {
+                console.warn('Failed with URL:', url, error);
+                lastError = error;
+            }
+        }
 
-        // Validate data
-        if (!chartData.chart?.result?.[0]) {
-            throw new Error('No chart data available');
+        if (!chartData) {
+            throw new Error('Failed to fetch data from all sources');
+        }
+
+        // Try to get quote summary data
+        let stats = {};
+        try {
+            const quoteUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=summaryDetail,defaultKeyStatistics,financialData,price,assetProfile`)}`;
+            const quoteResponse = await this.fetchWithTimeout(quoteUrl);
+            if (quoteResponse.ok) {
+                const quoteData = await quoteResponse.json();
+                stats = quoteData.quoteSummary?.result?.[0] || {};
+            }
+        } catch (error) {
+            console.warn('Failed to fetch quote summary:', error);
+            stats = this.createBasicStats(chartData, symbol);
         }
 
         return {
             symbol: symbol,
-            chart: chartData.chart.result[0],
-            quote: chartData.chart.result[0],
-            stats: quoteData.quoteSummary?.result?.[0] || {},
-            historicalData: chartData.chart.result[0]
+            chart: chartData,
+            quote: chartData,
+            stats: stats,
+            historicalData: chartData
         };
     }
 
-    async fetchFromAlternative(symbol) {
-        // Try with query2 endpoint
-        const chartUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`;
+    async fetchWithTimeout(url, timeout = 10000) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
         
         try {
-            const response = await fetch(chartUrl, {
+            const response = await fetch(url, {
+                signal: controller.signal,
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
                     'Accept': 'application/json',
+                    'Origin': window.location.origin
                 }
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const chartData = await response.json();
             
-            if (!chartData.chart?.result?.[0]) {
-                throw new Error('No data available');
-            }
-
-            // Basic stats from chart data only
-            return {
-                symbol: symbol,
-                chart: chartData.chart.result[0],
-                quote: chartData.chart.result[0],
-                stats: this.createBasicStats(chartData.chart.result[0], symbol),
-                historicalData: chartData.chart.result[0]
-            };
+            clearTimeout(timeoutId);
+            return response;
         } catch (error) {
-            console.error('Alternative API also failed:', error);
-            throw new Error('Unable to fetch stock data from any source');
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error('Request timeout');
+            }
+            throw error;
         }
     }
 
     createBasicStats(chartData, symbol) {
-        // Create basic stats from chart data when quote summary is unavailable
+        // Create basic stats from chart data
         const meta = chartData.meta || {};
         const indicators = chartData.indicators?.quote?.[0] || {};
         
@@ -180,7 +181,7 @@ class StockAnalyzer {
         return {
             price: {
                 longName: symbol,
-                exchangeName: meta.exchangeName || meta.fullExchangeName || '',
+                exchangeName: meta.exchangeName || meta.fullExchangeName || 'US Exchange',
                 marketCap: { raw: 0, fmt: 'N/A' },
                 volume: { raw: avgVolume, fmt: this.formatVolume(avgVolume) }
             },
@@ -504,35 +505,8 @@ class StockAnalyzer {
             case 'overview':
                 content.innerHTML = this.getOverviewHTML();
                 break;
-            case 'oneil':
-                content.innerHTML = window.analyzeOneil ? window.analyzeOneil(this.currentStock) : this.getPlaceholderHTML('William J. O\'Neil - CANSLIM');
-                break;
-            case 'blackscholes':
-                content.innerHTML = window.analyzeBlackScholes ? window.analyzeBlackScholes(this.currentStock) : this.getPlaceholderHTML('Black-Scholes Model');
-                break;
-            case 'buffett':
-                content.innerHTML = window.analyzeBuffett ? window.analyzeBuffett(this.currentStock) : this.getPlaceholderHTML('Warren Buffett Intrinsic Value');
-                break;
-            case 'famafrench':
-                content.innerHTML = window.analyzeFamaFrench ? window.analyzeFamaFrench(this.currentStock) : this.getPlaceholderHTML('Fama-French Three Factor');
-                break;
-            case 'magicformula':
-                content.innerHTML = window.analyzeMagicFormula ? window.analyzeMagicFormula(this.currentStock) : this.getPlaceholderHTML('Magic Formula');
-                break;
-            case 'piotroski':
-                content.innerHTML = window.analyzePiotroski ? window.analyzePiotroski(this.currentStock) : this.getPlaceholderHTML('Piotroski F-Score');
-                break;
-            case 'graham':
-                content.innerHTML = window.analyzeGraham ? window.analyzeGraham(this.currentStock) : this.getPlaceholderHTML('Benjamin Graham Value');
-                break;
-            case 'acquirer':
-                content.innerHTML = window.analyzeAcquirerMultiple ? window.analyzeAcquirerMultiple(this.currentStock) : this.getPlaceholderHTML('Acquirer\'s Multiple');
-                break;
-            case 'minervini':
-                content.innerHTML = window.analyzeMinervini ? window.analyzeMinervini(this.currentStock) : this.getPlaceholderHTML('Mark Minervini SEPA');
-                break;
-            case 'lynch':
-                content.innerHTML = window.analyzeLynch ? window.analyzeLynch(this.currentStock) : this.getPlaceholderHTML('Peter Lynch GARP');
+            default:
+                content.innerHTML = this.getPlaceholderHTML(framework);
                 break;
         }
     }
@@ -555,34 +529,33 @@ class StockAnalyzer {
                         <div class="stat-label">Industry</div>
                         <div class="metric-value">${stats?.assetProfile?.industry || 'N/A'}</div>
                     </div>
-                    <div class="metric-card">
-                        <div class="stat-label">Employees</div>
-                        <div class="metric-value">${stats?.assetProfile?.fullTimeEmployees || 'N/A'}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="stat-label">Website</div>
-                        <div class="metric-value">${stats?.assetProfile?.website || 'N/A'}</div>
-                    </div>
                 </div>
                 
-                <h3>Company Description</h3>
-                <p class="company-description">${stats?.assetProfile?.longBusinessSummary || 'No description available.'}</p>
-                
                 <div class="verdict neutral">
-                    <strong>📊 Overview:</strong> Select a framework tab above for detailed analysis
+                    <strong>📊 Overview:</strong> Basic stock data loaded successfully. Framework analyses coming soon.
                 </div>
             </div>
         `;
     }
 
-    getPlaceholderHTML(title) {
+    getPlaceholderHTML(framework) {
+        const titles = {
+            'oneil': "William J. O'Neil - CANSLIM",
+            'blackscholes': 'Black-Scholes Model',
+            'buffett': 'Warren Buffett Intrinsic Value',
+            'famafrench': 'Fama-French Three Factor',
+            'magicformula': 'Magic Formula',
+            'piotroski': 'Piotroski F-Score',
+            'graham': 'Benjamin Graham Value',
+            'acquirer': "Acquirer's Multiple",
+            'minervini': 'Mark Minervini SEPA',
+            'lynch': 'Peter Lynch GARP'
+        };
+        
         return `
             <div class="framework-placeholder">
-                <h3>${title}</h3>
-                <p>This framework analysis is coming soon.</p>
-                <div class="verdict neutral">
-                    <strong>ℹ️ Note:</strong> The core stock data is working. Framework analyses will be added in future updates.
-                </div>
+                <h3>${titles[framework] || framework}</h3>
+                <p>This framework analysis will be available soon.</p>
             </div>
         `;
     }
@@ -619,37 +592,10 @@ class StockAnalyzer {
         container.innerHTML = this.watchlist.map(symbol => `
             <div class="watchlist-item" onclick="analyzer.loadStock('${symbol}')">
                 <span class="symbol">${symbol}</span>
-                <span class="price">Loading...</span>
+                <span class="price">---</span>
                 <button class="remove-btn" onclick="event.stopPropagation(); analyzer.removeFromWatchlist('${symbol}')">✕</button>
             </div>
         `).join('');
-        
-        // Fetch prices for watchlist items
-        this.watchlist.forEach(symbol => {
-            this.fetchWatchlistPrice(symbol);
-        });
-    }
-
-    async fetchWatchlistPrice(symbol) {
-        try {
-            const data = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-            }).then(res => res.json());
-            
-            const price = data.chart?.result?.[0]?.meta?.regularMarketPrice;
-            if (price) {
-                const items = document.querySelectorAll('.watchlist-item');
-                items.forEach(item => {
-                    if (item.querySelector('.symbol').textContent === symbol) {
-                        item.querySelector('.price').textContent = `$${price.toFixed(2)}`;
-                    }
-                });
-            }
-        } catch (error) {
-            console.error(`Error fetching price for ${symbol}:`, error);
-        }
     }
 
     async loadStock(symbol) {
@@ -683,7 +629,6 @@ class StockAnalyzer {
     }
 
     showLoading() {
-        // Create loading overlay
         const loadingDiv = document.createElement('div');
         loadingDiv.id = 'loadingOverlay';
         loadingDiv.innerHTML = `
@@ -714,46 +659,17 @@ class StockAnalyzer {
     }
 
     showError(message) {
-        // Create error toast
-        const toast = document.createElement('div');
-        toast.className = 'toast error';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        
-        setTimeout(() => toast.classList.add('show'), 100);
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 5000);
+        console.error(message);
+        alert(message); // Use alert for maximum compatibility
     }
 
     showToast(message) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        
-        setTimeout(() => toast.classList.add('show'), 100);
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+        console.log(message); // Log to console as fallback
     }
 }
 
-// Global formatVolume function for chart tooltips
-function formatVolume(value) {
-    if (!value) return 'N/A';
-    if (value >= 1e9) return `${(value / 1e9).toFixed(2)}B`;
-    if (value >= 1e6) return `${(value / 1e6).toFixed(2)}M`;
-    if (value >= 1e3) return `${(value / 1e3).toFixed(2)}K`;
-    return value.toString();
-}
-
-// Initialize the application when DOM is ready
+// Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     window.analyzer = new StockAnalyzer();
-    console.log('Stock Analyzer initialized');
+    console.log('Stock Analyzer initialized. Ready to search!');
 });
