@@ -307,8 +307,8 @@ class StaticStockAnalyzer {
     getFrameworkRegistry() {
         return [
             { name: 'Graham', fn: window.analyzeGraham || null },
-            { name: 'Buffett', fn: null },
-            { name: 'Lynch', fn: null },
+            { name: 'Buffett', fn: window.analyzeBuffett || null },
+            { name: 'Lynch', fn: window.analyzeLynch || null },
             { name: 'Magic Formula', fn: null },
             { name: "Acquirer's Multiple", fn: null },
             { name: 'Piotroski', fn: null },
