@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analyzer Pro - Static Data Version</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <h1>📊 StockAnalyzer Pro</h1>
+                <span class="subtitle">Static Data Version</span>
+            </div>
+        </header>
+        <div class="main-content">
+            <aside class="watchlist-sidebar">
+                <div class="watchlist-header">
+                    <h2>⭐ Watchlist</h2>
+                    <span class="count-badge" id="watchlistCount">0</span>
+                </div>
+                <div id="watchlistItems" class="watchlist-items"></div>
+                <div class="available-stocks">
+                    <h3>Tickers</h3>
+                    <div id="availableStocks" class="available-stocks-list ticker-buttons"></div>
+                </div>
+            </aside>
+            <main class="analysis-area">
+                <div id="stockOverview" class="stock-overview hidden">
+                    <div class="stock-header">
+                        <div class="stock-title">
+                            <h2 id="stockName">-</h2>
+                            <span id="stockSymbol" class="stock-symbol">-</span>
+                        </div>
+                        <div class="price-block">
+                            <span id="currentPrice" class="current-price">$0.00</span>
+                            <span id="priceChange" class="price-change">-</span>
+                        </div>
+                    </div>
+
+                    <div class="ohlc-row">
+                        <div class="ohlc-item">
+                            <span class="ohlc-label">Open</span>
+                            <span id="openPrice">-</span>
+                        </div>
+                        <div class="ohlc-item">
+                            <span class="ohlc-label">High</span>
+                            <span id="highPrice">-</span>
+                        </div>
+                        <div class="ohlc-item">
+                            <span class="ohlc-label">Low</span>
+                            <span id="lowPrice">-</span>
+                        </div>
+                        <div class="ohlc-item">
+                            <span class="ohlc-label">Prev Close</span>
+                            <span id="prevClosePrice">-</span>
+                        </div>
+                        <div class="ohlc-item">
+                            <span class="ohlc-label">Volume</span>
+                            <span id="volumeData">-</span>
+                        </div>
+                    </div>
+
+                    <div id="quickStats" class="quick-stats"></div>
+
+                    <div class="charts-row">
+                        <div class="chart-container">
+                            <canvas id="priceChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="volumeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="frameworkSelector" class="framework-selector"></div>
+                </div>
+
+                <div id="frameworkContent" class="framework-content"></div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Frameworks wired up so far: Graham, Buffett, Lynch, Magic Formula,
+         Acquirer's Multiple. The other 5 are rewritten and added here one at
+         a time / in reviewed batches. -->
+    <script src="frameworks/graham.js"></script>
+    <script src="frameworks/buffett.js"></script>
+    <script src="frameworks/lynch.js"></script>
+    <script src="frameworks/magicFormula.js"></script>
+    <script src="frameworks/acquirerMultiple.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
