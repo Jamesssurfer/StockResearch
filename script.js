@@ -83,12 +83,14 @@ class StaticStockAnalyzer {
             }
 
             const balanceSheetLatest = this.extractBalanceSheetLatest(workbook);
+            const multiPeriod = this.buildMultiPeriod(workbook);
 
             this.currentStock = {
                 symbol: symbol,
                 metrics: metrics,
                 historicalData: historicalData,
-                balanceSheetLatest: balanceSheetLatest
+                balanceSheetLatest: balanceSheetLatest,
+                multiPeriod: multiPeriod
             };
 
             this.displayStockData();
@@ -257,6 +259,65 @@ class StaticStockAnalyzer {
         `).join('');
     }
 
+    // Generic reader for one workbook sheet's { rows, labelKey, cols } where
+    // cols are the report-date column headers sorted most-recent-first.
+    // Shared by extractBalanceSheetLatest() logic and buildMultiPeriod() below.
+    getSheetPeriods(workbook, sheetName) {
+        const rows = this.sheetToRows(workbook, sheetName);
+        if (!rows.length) return { rows: [], labelKey: null, cols: [] };
+        const labelKey = Object.keys(rows[0]).find(k => k === '' || k.startsWith('__EMPTY')) || Object.keys(rows[0])[0];
+        const dateCols = Object.keys(rows[0]).filter(k => k !== labelKey);
+        const cols = dateCols.slice().sort((a, b) => {
+            const da = new Date(a), db = new Date(b);
+            if (isNaN(da) || isNaN(db)) return 0;
+            return db - da; // most recent first
+        });
+        return { rows, labelKey, cols };
+    }
+
+    findRowValue(rows, labelKey, col, aliases) {
+        for (const row of rows) {
+            const label = String(row[labelKey] || '').toLowerCase();
+            if (aliases.some(a => label === a || label.includes(a))) {
+                const v = parseFloat(row[col]);
+                if (!isNaN(v)) return v;
+            }
+        }
+        return null;
+    }
+
+    // Pulls { latest, prior } for every line item Piotroski's F-Score needs,
+    // from Balance_Sheet, Cash_Flow, and Financials (all annual periods —
+    // yfinance's ticker.financials defaults to annual, not quarterly, which
+    // your fetcher uses as-is). 'prior' is null if the workbook only has one
+    // period saved — piotroski.js treats any check needing 'prior' as
+    // not-evaluable rather than guessing, when that happens.
+    buildMultiPeriod(workbook) {
+        const bs = this.getSheetPeriods(workbook, 'Balance_Sheet');
+        const cf = this.getSheetPeriods(workbook, 'Cash_Flow');
+        const fin = this.getSheetPeriods(workbook, 'Financials');
+
+        const twoCol = (sheet, aliases) => {
+            if (!sheet.cols.length) return { latest: null, prior: null };
+            return {
+                latest: this.findRowValue(sheet.rows, sheet.labelKey, sheet.cols[0], aliases),
+                prior: sheet.cols[1] ? this.findRowValue(sheet.rows, sheet.labelKey, sheet.cols[1], aliases) : null
+            };
+        };
+
+        return {
+            netIncome: twoCol(fin, ['net income']),
+            operatingCashFlow: twoCol(cf, ['operating cash flow', 'cash flow from continuing operating activities', 'total cash from operating activities']),
+            totalAssets: twoCol(bs, ['total assets']),
+            totalDebt: twoCol(bs, ['total debt']),
+            currentAssets: twoCol(bs, ['current assets']),
+            currentLiabilities: twoCol(bs, ['current liabilities']),
+            sharesOutstanding: twoCol(bs, ['ordinary shares number', 'share issued']),
+            grossProfit: twoCol(fin, ['gross profit']),
+            totalRevenue: twoCol(fin, ['total revenue'])
+        };
+    }
+
     // Pulls the fields Graham's NCAV calc needs out of the Balance_Sheet sheet.
     // yfinance's balance_sheet DataFrame has line-item labels as the index and
     // report dates as columns; after round-tripping through to_dict()/to_excel(),
@@ -312,8 +373,8 @@ class StaticStockAnalyzer {
             { name: 'Lynch', fn: window.analyzeLynch || null },
             { name: 'Magic Formula', fn: window.analyzeMagicFormula || null },
             { name: "Acquirer's Multiple", fn: window.analyzeAcquirerMultiple || null },
-            { name: 'Piotroski', fn: null },
-            { name: "O'Neil CANSLIM", fn: null },
+            { name: 'Piotroski', fn: window.analyzePiotroski || null },
+            { name: "O'Neil CANSLIM", fn: window.analyzeOneil || null },
             { name: 'Minervini', fn: null },
             { name: 'Fama-French', fn: null },
             { name: 'Black-Scholes', fn: null }
@@ -324,13 +385,24 @@ class StaticStockAnalyzer {
         const container = document.getElementById('frameworkSelector');
         if (!container) return;
 
+        // Built via data-framework + addEventListener rather than an inline
+        // onclick="...('${fw.name}')" string — a name containing an
+        // apostrophe (e.g. "Acquirer's Multiple") breaks a single-quoted JS
+        // string literal built that way, which is exactly why that button
+        // silently did nothing when clicked.
         container.innerHTML = this.getFrameworkRegistry().map(fw => `
             <button
                 class="framework-tab ${fw.fn ? '' : 'disabled'}"
-                ${fw.fn ? `onclick="analyzer.selectFramework('${fw.name}')"` : 'disabled'}
+                data-framework="${fw.name}"
+                ${fw.fn ? '' : 'disabled'}
                 title="${fw.fn ? '' : 'Coming soon'}"
             >${fw.name}</button>
         `).join('');
+
+        container.querySelectorAll('.framework-tab').forEach(btn => {
+            if (btn.disabled) return;
+            btn.addEventListener('click', () => this.selectFramework(btn.dataset.framework));
+        });
     }
 
     selectFramework(name) {
@@ -339,7 +411,7 @@ class StaticStockAnalyzer {
         if (!fw || !fw.fn || !this.currentStock) return;
 
         document.querySelectorAll('.framework-tab').forEach(el => el.classList.remove('active'));
-        const btn = Array.from(document.querySelectorAll('.framework-tab')).find(el => el.textContent.trim() === name);
+        const btn = Array.from(document.querySelectorAll('.framework-tab')).find(el => el.dataset.framework === name);
         if (btn) btn.classList.add('active');
 
         target.innerHTML = fw.fn(this.currentStock);
