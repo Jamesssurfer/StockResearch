@@ -191,3 +191,39 @@
     color: #64748b;
     margin-bottom: 20px;
 }
+
+/* Framework Tab Strip */
+.framework-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.framework-tab {
+    padding: 8px 16px;
+    border: 1px solid var(--primary, #2563eb);
+    background: transparent;
+    color: var(--primary, #2563eb);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.framework-tab:hover:not(.disabled) {
+    background: var(--primary, #2563eb);
+    color: white;
+}
+
+.framework-tab.active {
+    background: var(--primary, #2563eb);
+    color: white;
+}
+
+.framework-tab.disabled {
+    border-color: #cbd5e1;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
