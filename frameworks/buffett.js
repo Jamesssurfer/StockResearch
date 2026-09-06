@@ -20,7 +20,7 @@ window.analyzeBuffett = function(stock) {
         'Current Ratio': isFinite(m.current_ratio) ? Number(m.current_ratio).toFixed(2) : 'N/A',
         'Profit Margin': isFinite(m.profit_margin) ? `${(m.profit_margin * 100).toFixed(2)}%` : 'N/A',
         'EPS Growth': isFinite(m.earnings_growth) ? `${(m.earnings_growth * 100).toFixed(2)}%` : 'N/A',
-        'Dividend Yield': isFinite(m.dividend_yield) ? `${(m.dividend_yield * 100).toFixed(2)}%` : '0%'
+        'Dividend Yield': isFinite(m.dividend_yield) ? `${Number(m.dividend_yield).toFixed(2)}%` : '0%'
     };
 
     const score = buffettCalcScore(m, intrinsicValue, currentPrice);
