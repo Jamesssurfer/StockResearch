@@ -134,7 +134,11 @@ class StaticStockAnalyzer {
         this.displayQuickStats(metrics);
 
         // Display charts
-        this.displayCharts(stock.historicalData);
+        // Chart display stays windowed to the last 30 days even though
+        // stock.historicalData now holds a full year — that full year is
+        // needed by Minervini's SMA calculations, but a 1-year line chart
+        // isn't what "30-day price history" originally meant on this page.
+        this.displayCharts(stock.historicalData.slice(-30));
 
         // Framework content is populated by renderFrameworkSelector()/selectFramework()
         // right after this call returns. This is just the pre-selection placeholder.
