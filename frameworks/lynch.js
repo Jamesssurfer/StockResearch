@@ -12,7 +12,7 @@ window.analyzeLynch = function(stock) {
     const metrics = {
         'PEG Ratio': peg !== null ? peg.toFixed(2) : 'N/A',
         'Earnings Yield': earningsYield !== null ? `${(earningsYield * 100).toFixed(2)}%` : 'N/A',
-        'Dividend Yield': isFinite(dividendYield) ? `${(dividendYield * 100).toFixed(2)}%` : '0%',
+        'Dividend Yield': isFinite(dividendYield) ? `${Number(dividendYield).toFixed(2)}%` : '0%',
         'P/E Ratio': isFinite(m.pe_ratio) ? Number(m.pe_ratio).toFixed(2) : (m.pe_ratio || 'N/A'),
         'EPS Growth': isFinite(m.earnings_growth) ? `${(m.earnings_growth * 100).toFixed(2)}%` : 'N/A',
         'Debt to Equity': isFinite(m.debt_to_equity) ? Number(m.debt_to_equity).toFixed(2) : 'N/A'
