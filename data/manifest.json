@@ -7,7 +7,7 @@
     "open": 328.305,
     "day_high": 328.93,
     "day_low": 317.86,
-    "volume": 38272821,
+    "volume": 39606884,
     "avg_volume": 54154936,
     "market_cap": 4669700046848,
     "pe_ratio": 36.60984,
@@ -34,7 +34,7 @@
     "industry": "Consumer Electronics",
     "website": "https://www.apple.com",
     "description": "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple Vision Pro, Apple TV, Apple Watch, Beats products, and HomePod, as well as Apple branded and third-party accessories. It also provides AppleCare support and cloud services; and operates various platforms, including the App Store that allows customers to discover and download applications and digital content, such as books, music, video, games, and podcasts, as well as advertising services include third-party licensing arrangements and its own advertising platforms. In addition, the company offers various subscription-based services, such as Apple Arcade, a game subscription service; Apple Fitness+, a personalized fitness service; Apple Music, which offers users a curated listening experience with on-demand radio stations; Apple News+, a subscription news and magazine service; Apple TV, which offers original content and live sports; Apple Card, a co-branded credit card; and Apple Pay, a cashless payment service, as well as licenses its intellectual property. The company serves consumers, and small and mid-sized businesses; and the education, enterprise, and government markets. It distributes third-party applications for its products through the App Store. The company also sells its products through its retail and online stores, and direct sales force; and third-party cellular network carriers and resellers. The company was formerly known as Apple Computer, Inc. and changed its name to Apple Inc. in January 2007. Apple Inc. was founded in 1976 and is headquartered in Cupertino, California.",
-    "last_updated": "2026-09-06 22:59:07"
+    "last_updated": "2026-09-07 03:07:57"
   },
   {
     "symbol": "MSFT",
@@ -44,7 +44,7 @@
     "open": 510.0,
     "day_high": 511.0,
     "day_low": 499.36,
-    "volume": 17437000,
+    "volume": 18101758,
     "avg_volume": 36783650,
     "market_cap": 3710545297408,
     "pe_ratio": 27.853958,
@@ -71,7 +71,7 @@
     "industry": "Software - Infrastructure",
     "website": "https://www.microsoft.com",
     "description": "Microsoft Corporation, a technology company, develops and supports a portfolio of technology solutions for individuals and businesses worldwide. Its products include operating systems, server applications, business solution applications, software development tools, desktop and server management tools, and video games; and devices, such as PCs, tablets, gaming and entertainment consoles, other intelligent devices, and related accessories. The company's Productivity and Business Processes segment offers Microsoft 365 Commercial, Enterprise Mobility + Security, Power BI, Exchange, SharePoint, Microsoft Teams, Microsoft 365 Security and Compliance, Microsoft 365 Copilot, and Windows Commercial on-premises and Office licensed on-premises. This segment also provides Microsoft 365 Consumer products and cloud services; LinkedIn, including talent solutions, marketing solutions, subscriptions, and sales solutions; Dynamics 365, a set of cloud-based applications; and on-premises ERP and CRM applications. Its Intelligent Cloud segment offers server products and cloud services; cloud and AI consumption-based services, GitHub cloud services, health and life sciences cloud services, as well as virtual desktop offerings, and other cloud services; SQL Server, Windows Server, Visual Studio, System Center, and related client access licenses; and enterprise support services, industry solutions, Microsoft partner network, and learning experience. The company's More Personal Computing segment provides Windows OEM licensing and devices comprising Surface and PC accessories; XBOX hardware, and XBOX first- and third-party content and services; XBOX Game Pass and other subscriptions; XBOX Cloud Gaming, advertising, and other cloud services; and search advertising consisting of Bing, Copilot, Microsoft News, Microsoft Edge, and third-party affiliates. It sells its products through partners and retail networks. The company was founded in 1975 and is headquartered in Redmond, Washington.",
-    "last_updated": "2026-09-06 22:59:11"
+    "last_updated": "2026-09-07 03:08:00"
   },
   {
     "symbol": "GOOGL",
@@ -80,8 +80,8 @@
     "previous_close": 342.26,
     "open": 342.575,
     "day_high": 343.53,
-    "day_low": 337.1,
-    "volume": 20841990,
+    "day_low": 337.09,
+    "volume": 23189321,
     "avg_volume": 30102998,
     "market_cap": 4139343675392,
     "pe_ratio": 16.97392,
@@ -108,7 +108,7 @@
     "industry": "Internet Content & Information",
     "website": "https://abc.xyz",
     "description": "Alphabet Inc. offers various products and platforms in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America. It operates through Google Services, Google Cloud, and Other Bets segments. The Google Services segment provides products and services, including ads, Android, Chrome, devices, Gmail, Google Drive, Google Maps, Google Photos, Google Play, Search, and YouTube. It is also involved in the sale of apps and in-app purchases and digital content in Google Play and YouTube; and devices, as well as the provision of YouTube consumer subscription services, such as YouTube TV, YouTube Music and Premium, NFL Sunday Ticket, and Google One. The Google Cloud segment offers consumption-based fees and subscriptions for AI solutions, including AI infrastructure, Vertex AI platform, and Gemini enterprise. It also provides cybersecurity, and data and analytics services; Google Workspace that include cloud-based communication and collaboration tools for enterprises, such as Calendar, Gmail, Docs, Drive, and Meet; and other enterprise services. The Other Bets segment sells transportation and internet services. Alphabet Inc. was incorporated in 1998 and is headquartered in Mountain View, California.",
-    "last_updated": "2026-09-06 22:59:14"
+    "last_updated": "2026-09-07 03:08:04"
   },
   {
     "symbol": "AMZN",
@@ -118,7 +118,7 @@
     "open": 259.215,
     "day_high": 261.12,
     "day_low": 255.29,
-    "volume": 29968655,
+    "volume": 30749912,
     "avg_volume": 47826544,
     "market_cap": 2788369891328,
     "pe_ratio": 20.797264,
@@ -145,7 +145,7 @@
     "industry": "Internet Retail",
     "website": "https://www.amazon.com",
     "description": "Amazon.com, Inc. engages in the retail sale of consumer products, advertising, and subscriptions service through online and physical stores in North America and internationally. The company operates through three segments: North America, International, and Amazon Web Services (AWS). It also manufactures and sells electronic devices, including Kindle, fire tablets, fire TVs, echo, ring, blink, and eero; and develops and produces media content. In addition, the company offers programs that enable sellers to sell their products in its stores; and programs that allow authors, independent publishers, musicians, filmmakers, Twitch streamers, skill and app developers, and others to publish and sell content. Further, it provides compute, storage, Artificial intelligence, database, analytics, machine learning, and other services, as well as advertising services through programs, such as sponsored ads, display, and video advertising. Additionally, the company offers Amazon Prime, a membership program. The company's products offered through its stores include merchandise and content purchased for resale and products offered by third-party sellers. It serves consumers, sellers, developers, enterprises, content creators, advertisers, and employees. The company was incorporated in 1994 and is headquartered in Seattle, Washington.",
-    "last_updated": "2026-09-06 22:59:18"
+    "last_updated": "2026-09-07 03:08:08"
   },
   {
     "symbol": "TSLA",
@@ -155,7 +155,7 @@
     "open": 362.18,
     "day_high": 364.69,
     "day_low": 351.3201,
-    "volume": 64559388,
+    "volume": 65018209,
     "avg_volume": 41827363,
     "market_cap": 1398455795712,
     "pe_ratio": 321.8909,
@@ -182,7 +182,7 @@
     "industry": "Auto Manufacturers",
     "website": "https://www.tesla.com",
     "description": "Tesla, Inc. designs, develops, manufactures, leases, and sells electric vehicles, and energy generation and storage systems in the United States, China, and internationally. The company operates in two segments, Automotive; and Energy Generation and Storage. The company offers electric vehicles, as well as sells automotive regulatory credits; and non-warranty maintenance services and collision, automotive insurance services, as well as part sales and retail merchandise sale. It also provides sedans and sport utility vehicles through direct and used vehicle sales, a network of Tesla Superchargers, and in-app upgrades; purchase financing and leasing services; services for electric vehicles through its company-owned service locations and Tesla mobile service technicians; and vehicle limited warranties and extended service plans. In addition, the company engages in the design, manufacture, installation, sale, and leasing of solar energy generation and energy storage products, and related services to residential, commercial, and industrial customers and utilities through its website, stores, and galleries, as well as through a network of channel partners. Further, it provides services and repairs to its energy product customers, including under warranty and extended service plans; and various financing options to its residential customers; lithium-ion battery energy storage products, such as Powerwall and Megapack; energy generation products, including solar panels and solar roof; self-driving development and artificial intelligence software, vehicle control and infotainment software, and battery and powertrain. The company was formerly known as Tesla Motors, Inc. and changed its name to Tesla, Inc. in February 2017. Tesla, Inc. was incorporated in 2003 and is headquartered in Austin, Texas.",
-    "last_updated": "2026-09-06 22:59:21"
+    "last_updated": "2026-09-07 03:08:11"
   },
   {
     "symbol": "META",
@@ -190,9 +190,9 @@
     "current_price": 616.77,
     "previous_close": 610.68,
     "open": 612.495,
-    "day_high": 617.43,
+    "day_high": 617.46,
     "day_low": 605.27,
-    "volume": 15745973,
+    "volume": 15966213,
     "avg_volume": 17851201,
     "market_cap": 1571225468928,
     "pe_ratio": 23.256788,
@@ -219,7 +219,7 @@
     "industry": "Internet Content & Information",
     "website": "https://www.meta.com",
     "description": "Meta Platforms, Inc. engages in the development of products that enable people to connect and share with friends and family through mobile devices, personal computers, virtual reality (VR) headsets, and AI glasses in the United States, Canada, Europe, Asia-Pacific, and internationally. It operates through two segments, Family of Apps (FoA) and Reality Labs (RL). The FoA segment offers Facebook, which enables people to build community through feed, reels, stories, groups, marketplace, and other; Instagram that brings people closer through Instagram feed, stories, reels, live, and messaging; Messenger, a messaging application for people to connect with friends, family, communities, and businesses across platforms and devices through text, audio, and video calls; Meta AI, an assistant that's available across apps, as a stand-alone app, on AI glasses, and on the web; Threads, an application for text-based updates and public conversations; and WhatsApp, a messaging application that is used by people and businesses to communicate and transact. The RL segment provides virtual and augmented reality products, including consumer hardware, software, and content that help people feel connected, as well as Meta Quest devices that enable social experiences across gaming, fitness, entertainment, and more. The segment also includes wearables such as AI glasses like Ray Ban Meta and Oakley Meta glasses; and the Meta Ray Ban Display, which combines AI glasses with an integrated lens display and the Meta Neural Band, a wrist worn device using electromyography that lets people control their AI glasses through neuromuscular signals. Meta Platforms, Inc. has a collaboration with Microsoft Corporation, NVIDIA Corporation, Advanced Micro Devices, Inc., Broadcom Inc., and OpenAI, L.L.C. The company was formerly known as Facebook, Inc. and changed its name to Meta Platforms, Inc. in October 2021. The company was incorporated in 2004 and is headquartered in Menlo Park, California.",
-    "last_updated": "2026-09-06 22:59:25"
+    "last_updated": "2026-09-07 03:08:15"
   },
   {
     "symbol": "NVDA",
@@ -229,7 +229,7 @@
     "open": 231.142,
     "day_high": 234.76,
     "day_low": 229.63,
-    "volume": 132204717,
+    "volume": 135352420,
     "avg_volume": 135559144,
     "market_cap": 5562502742016,
     "pe_ratio": 29.159492,
@@ -256,7 +256,7 @@
     "industry": "Semiconductors",
     "website": "https://www.nvidia.com",
     "description": "NVIDIA Corporation operates as a data center scale AI infrastructure company in the United States, Taiwan, China, Hong Kong, Europe, and internationally. It operates through Compute & Networking, and Graphics segments. The Compute & Networking segment provides data center accelerated computing and networking platforms and artificial intelligence solutions and software, and automotive platforms and autonomous and electric vehicle solutions, including software. The Graphics segment offers GeForce GPUs for gaming and PCs; Quadro/NVIDIA RTX GPUs for enterprise workstation graphics. The company's products are used in gaming, professional visualization, data center, and automotive markets. It sells its products to original equipment manufacturers, original device manufacturers, system integrators and distributors, independent software vendors, cloud service providers, add-in board manufacturers, distributors, automotive manufacturers and tier-1 automotive suppliers, and other ecosystem participants. NVIDIA Corporation was incorporated in 1993 and is headquartered in Santa Clara, California.",
-    "last_updated": "2026-09-06 22:59:28"
+    "last_updated": "2026-09-07 03:08:18"
   },
   {
     "symbol": "JPM",
@@ -293,7 +293,7 @@
     "industry": "Banks - Diversified",
     "website": "https://www.jpmorganchase.com",
     "description": "JPMorgan Chase & Co. operates as a bank and financial holding company in the United States, rest of North America, Europe, the Middle East, Africa, the Asia Pacific, Latin America, and the Caribbean. It operates in three segments: Consumer & Community Banking, Commercial & Investment Bank, and Asset & Wealth Management. The company offers deposit, investment and lending products, and cash management; mortgage origination and servicing activities; residential mortgages and home equity loans; and credit cards, payment solutions, travel services, merchant offers, lifestyle benefits, auto loans, and leases to consumers and small businesses through bank branches, ATMs, and digital and telephone banking. It also provides investment banking, market-making, financing, custody, and securities products and services; corporate strategy and structure advisory, equity and debt market capital-raising, and loan origination and syndication services; cash and derivative instruments, risk management solutions, prime brokerage, clearing, and research; and fund services, liquidity and trading services, and data solutions products for large corporations, financial institutions, merchants, start-ups, small and midsized companies, local governments, municipalities, nonprofits, and commercial real estate clients. In addition, the company offers multi-asset investment management solutions in equities, fixed income, alternatives, and money market funds to institutional clients and retail investors; retirement products and services, estate planning, lending, deposits, and investment management products to high-net-worth clients; and financial transaction processing. JPMorgan Chase & Co. was founded in 1799 and is headquartered in New York, New York.",
-    "last_updated": "2026-09-06 22:59:32"
+    "last_updated": "2026-09-07 03:08:22"
   },
   {
     "symbol": "V",
@@ -330,7 +330,7 @@
     "industry": "Credit Services",
     "website": "https://www.visa.com",
     "description": "Visa Inc. operates as a payment technology company in the United States and internationally. The company operates VisaNet, a transaction processing network that enables authorization, clearing, and settlement of payment transactions. It also offers credit, debit, and prepaid card products; tap to pay, tokenization, and click to pay services; Visa Direct, a platform which facilitates money movement, enabling clients to collect, hold, convert, and send funds across its network; and issuing solutions, such as airport lounge access, dining reservations, shopping experiences, event tickets, and seller offers. In addition, the company provides acceptance solutions, an omnichannel payment integration with e-commerce platforms; risk detection and prevention solutions; and advisory and other services comprising consulting practice, proprietary analytics models, data scientists and economists, marketing services, and managed services. It provides its services under the Visa, Visa Electron, V PAY, Interlink, and PLUS brands. The company serves consumers, sellers, financial institutions, and government entities. Visa Inc. was founded in 1958 and is headquartered in San Francisco, California.",
-    "last_updated": "2026-09-06 22:59:35"
+    "last_updated": "2026-09-07 03:08:26"
   },
   {
     "symbol": "JNJ",
@@ -367,7 +367,7 @@
     "industry": "Drug Manufacturers - General",
     "website": "https://www.jnj.com",
     "description": "Johnson & Johnson, together with its subsidiaries, engages in the research and development, manufacture, and sale of a range of products in the healthcare field worldwide. It operates in two segments, Innovative Medicine and MedTech. The Innovative Medicine segment offers products for various therapeutic areas, such as oncology, immunology, neuroscience, pulmonary hypertension, infectious diseases, and cardiovascular and metabolism distributed through retailers, wholesalers, distributors, hospitals, and healthcare professionals for prescription use. The MedTech segment provides a portfolio of products used in the surgery, orthopedic, cardiovascular, and vision fields distributed through wholesalers, hospitals and retailers, and used in the professional fields by physicians, nurses, hospitals, eye care professionals and clinics. This segment also offers products and enabling technologies that support joint reconstruction, trauma, spine, sports related injuries, and others, as well as open, laparoscopic, and robotic surgical procedures; instrumentation, energy devices, stapling systems, wound closure, biosurgery products, and digital and robotic technologies; breast aesthetics and reconstruction; contact lenses under the ACUVUE brand; intraocular lenses for cataract surgery, and other products used in cataract and refractive procedures under the TECNIS brand. The company was founded in 1886 and is based in New Brunswick, New Jersey.",
-    "last_updated": "2026-09-06 22:59:39"
+    "last_updated": "2026-09-07 03:08:29"
   },
   {
     "symbol": "WMT",
@@ -377,7 +377,7 @@
     "open": 108.2,
     "day_high": 109.23,
     "day_low": 106.935,
-    "volume": 19188931,
+    "volume": 20540472,
     "avg_volume": 24355206,
     "market_cap": 852628602880,
     "pe_ratio": 38.81884,
@@ -404,7 +404,7 @@
     "industry": "Discount Stores",
     "website": "https://www.stock.walmart.com",
     "description": "Walmart Inc. engages in the operation of retail and wholesale stores and clubs, ecommerce websites, and mobile applications worldwide. The company operates through three segments: Walmart U.S., Walmart International, and Sam's Club U.S. It operates supercenters, supermarkets, warehouse clubs, cash and carry stores, and discount stores under Walmart and Walmart Neighborhood Market brands; membership-only warehouse clubs; and ecommerce websites, such as walmart.com.mx, walmart.ca, flipkart.com, PhonePe and other sites. It offers grocery items, including dry grocery, snacks, dairy, meat, produce, deli and bakery, frozen foods, alcoholic and nonalcoholic beverages, as well as consumables, such as health and beauty aids, pet supplies, household chemicals, paper goods, and baby products; and fuel and other categories. In addition, it is involved in the provision of health and wellness products covering pharmacy, optical and hearing services, over-the-counter drugs, and protein and nutrition products; and home, hardlines, and seasonal items, including home improvement, outdoor living, gardening, furniture, apparel, jewelry, tools and power equipment, housewares, toys, and mattresses. Further, the company offers consumer electronics and accessories, software, video games, office supplies, appliances, and third-party gift cards. Additionally, it operates digital payment platforms; offers financial services and related products, including money transfers, bill payments, money orders, check cashing, prepaid access, co-branded credit cards, installment lending, and earned wage access; and markets lines of merchandise under private and licensed brands. The company was formerly known as Wal-Mart Stores, Inc. and changed its name to Walmart Inc. in February 2018. Walmart Inc. was founded in 1945 and is based in Bentonville, Arkansas.",
-    "last_updated": "2026-09-06 22:59:42"
+    "last_updated": "2026-09-07 03:08:33"
   },
   {
     "symbol": "PG",
@@ -441,7 +441,7 @@
     "industry": "Household & Personal Products",
     "website": "https://www.pginvestor.com",
     "description": "The Procter & Gamble Company provides branded consumer packaged goods worldwide. It operates through five segments: Beauty; Grooming; Health Care; Fabric & Home Care; and Baby, Feminine & Family Care. The company offers conditioners, shampoos, styling aids, and treatments under the Head & Shoulders, Herbal Essences, Pantene, and Rejoice brands; antiperspirants, deodorants, and personal cleansing products under the Native, Old Spice, Safeguard, and Secret brands; and facial moisturizers, cleaners, and treatments under the Olay and SK-II brands. It also provides blades, razors, shave products, appliances, and other grooming products under the Braun, Gillette, and Venus brands. In addition, the company offers toothbrushes, toothpastes, and other oral care products under the Crest and Oral-B brands; and gastrointestinal, pain relief, rapid diagnostics, respiratory, vitamins/minerals/supplements, and other personal health care products under the Metamucil, Neurobion, Pepto-Bismol, and Vicks brands. Further, it provides fabric enhancers, and laundry additives and detergents under the Ariel, Downy, Gain, and Tide brands; and air and dish care, P&G professional, and surface care under the Cascade, Dawn, Fairy, Febreze, Mr. Clean, and Swiffer brands. Additionally, the company offers baby wipes, taped diapers, and pants under the Luvs and Pampers brands; adult incontinence and menstrual care products under the Always, Always Discreet, and Tampax brands; and paper towels, tissues, and toilet papers under the Bounty, Charmin, and Puffs brands. It sells its products through mass merchandisers, social ecommerce channels, grocery and specialty beauty stores, membership club stores, drug and department stores, distributors, wholesalers, airport duty-free and high-frequency stores, pharmacies, electronics stores, and professional channels, as well as directly to consumers. The company was founded in 1837 and is headquartered in Cincinnati, Ohio.",
-    "last_updated": "2026-09-06 22:59:46"
+    "last_updated": "2026-09-07 03:08:37"
   },
   {
     "symbol": "UNH",
@@ -478,7 +478,7 @@
     "industry": "Healthcare Plans",
     "website": "https://www.unitedhealthgroup.com",
     "description": "UnitedHealth Group Incorporated operates as a health care company in the United States and internationally. It operates through four segments: Optum Health, Optum Insight, Optum Rx; and UnitedHealthcare. The Optum Health segment provides care delivery, care management, wellness and consumer engagement, and health financial services with patients, consumers, care delivery systems, providers, employers, payers, and public-sector entities. The Optum Insight segment offers software and information products, advisory consulting arrangements, and managed services outsourcing contracts to hospital systems, physicians, health plans, public entities, life sciences companies and other organizations. The Optum Rx segment provides pharmacy care services and programs, including retail network contracting, home delivery, specialty and community health pharmacy services, infusion, and purchasing and clinical capabilities, as well as develops programs in the areas of step therapy, formulary management, drug adherence, and disease and drug therapy management. The UnitedHealthcare segment offers consumer-oriented health benefit plans and services for national employers, public sector employers, mid-sized employers, small businesses, and individuals; Medicaid plans, including Temporary Assistance to Needy Families; Children's Health Insurance Programs; Dual SNPs; Long-Term Services and Supports; Aged, Blind and Disabled; and other federal, state, and community health care programs. and health care benefits products and services to state programs caring for the economically disadvantaged, medically underserved, and those without the benefit of employer-funded health care coverage. UnitedHealth Group Incorporated was founded in 1974 and is based in Eden Prairie, Minnesota.",
-    "last_updated": "2026-09-06 22:59:49"
+    "last_updated": "2026-09-07 03:08:40"
   },
   {
     "symbol": "HD",
@@ -515,7 +515,7 @@
     "industry": "Home Improvement Retail",
     "website": "https://www.homedepot.com",
     "description": "The Home Depot, Inc. operates as a home improvement retailer in the United States and internationally. It sells various building materials, home improvement products, lawn and garden products, and d\u00e9cor products, as well as facilities maintenance, repair, and operations products. The company also offers installation services for flooring, water heaters, baths, garage doors, cabinets, cabinet makeovers, countertops, sheds, furnaces and central air systems, windows, and window coverings. In addition, it provides tool and equipment rental services. The company serves consumers, such as do-it-yourself homeowners and do-it-for-me customers; and professional renovators/remodelers, general contractors, homebuilders, maintenance professionals, handymen, property managers, building service contractors and specialty tradespeople, such as electricians, landscapers, insulation installers, plumbers, painters, pool contractors, roofers, and wallboard and ceiling installers. It sells its products through websites and its mobile applications, including homedepot.com; homedepot.ca and homedepot.com.mx; blinds.com, justblinds.com, and americanblinds.com for custom window coverings; constructionresourcesusa.com or design-oriented surfaces, appliances, and architectural specialty products; thecompanystore.com, an online site for textiles and d\u00e9cor products; hdsupply.com for maintenance, repair, and operations products and related services; and srsdistribution.com, heritagelandscapesupplygroup.com, heritagepoolsupplygroup.com, and gms.com for roofing and building materials, landscape, and pool products; and The Home Depot stores. The Home Depot, Inc. was incorporated in 1978 and is headquartered in Atlanta, Georgia.",
-    "last_updated": "2026-09-06 22:59:53"
+    "last_updated": "2026-09-07 03:08:44"
   },
   {
     "symbol": "DIS",
@@ -552,7 +552,7 @@
     "industry": "Entertainment",
     "website": "https://thewaltdisneycompany.com",
     "description": "The Walt Disney Company operates as an entertainment company in Americas, Europe, and the Asia Pacific. It operates in three segments: Entertainment, Sports, and Experiences. The company produces and distributes film and television content under the ABC Television Network, Disney, Freeform, FX, Fox, National Geographic, and Star brand television channels, as well as ABC television stations and A+E television networks; and produces original content under the Disney Branded Television, FX Productions, Lucasfilm, Marvel, National Geographic Studios, Pixar, Searchlight Pictures, Twentieth Century Studios, 20th Television, and Walt Disney Pictures banners. It also provides direct-to-consumer streaming services through Disney+, Disney+ Hotstar, and Hulu; sports-related video streaming content through ESPN, ESPN on ABC, ESPN+ DTC, and Star; sale/licensing of film and episodic content to television and video-on-demand services; theatrical, home entertainment, and music distribution services; DVD and Blu-ray discs, electronic home video licenses, and VOD rental services; staging and licensing of live entertainment events; and post-production services. In addition, the company operates theme parks and resorts, such as Walt Disney World Resort, Disneyland Resort, Disneyland Paris, Hong Kong Disneyland Resort, Shanghai Disney Resort, Disney Cruise Line, Disney Vacation Club, National Geographic Expeditions, and Adventures by Disney, as well as Aulani, a Disney resort and spa in Hawaii. Further, it licenses its intellectual property (IP) to a third party that owns and operates Tokyo Disney Resort; licenses trade names, characters, visual, literary, and other IP for use on merchandise, published materials, and games; operates a direct-to-home satellite distribution platform; sells branded merchandise through retail, online, and wholesale businesses; and develops and publishes books, comic books, and magazines. The company was founded in 1923 and is based in Burbank, California.",
-    "last_updated": "2026-09-06 22:59:56"
+    "last_updated": "2026-09-07 03:08:48"
   },
   {
     "symbol": "NFLX",
@@ -562,7 +562,7 @@
     "open": 82.17,
     "day_high": 82.69,
     "day_low": 78.23,
-    "volume": 39850506,
+    "volume": 40190010,
     "avg_volume": 41423988,
     "market_cap": 325828280320,
     "pe_ratio": 24.606918,
@@ -589,7 +589,7 @@
     "industry": "Entertainment",
     "website": "https://www.netflix.com",
     "description": "Netflix, Inc. provides entertainment services worldwide. The company offers television (TV) series, documentaries, feature films, games, and live programming across various genres and languages. It also provides members the ability to receive streaming content through a host of internet-connected devices, including TVs, digital video players, TV set-top boxes, and mobile devices. Netflix, Inc. was incorporated in 1997 and is headquartered in Los Gatos, California.",
-    "last_updated": "2026-09-06 23:00:00"
+    "last_updated": "2026-09-07 03:08:51"
   },
   {
     "symbol": "ADBE",
@@ -599,7 +599,7 @@
     "open": 274.461,
     "day_high": 275.91,
     "day_low": 263.96,
-    "volume": 6579463,
+    "volume": 6644829,
     "avg_volume": 6205739,
     "market_cap": 105937731584,
     "pe_ratio": 15.246569,
@@ -626,7 +626,7 @@
     "industry": "Software - Application",
     "website": "https://www.adobe.com",
     "description": "Adobe Inc. operates as a technology company worldwide. The Digital Media segment offers products and services that enable individuals, teams, and enterprises to create, publish, and promote content. This segment serves photographers, video editors, graphic and experience designers, game developers, content creators, students, marketers, business owners, knowledge workers, and consumers. The Digital Experience segment provides an integrated platform; and products, services, and solutions that enable brands and businesses to create, manage, execute, measure, monetize, and optimize customer experiences from analytics to commerce. This segment serves marketers, advertisers, agencies, publishers, merchandisers, merchants, web analysts, data scientists, developers, and executives across the C-suite. The Publishing and Advertising segment offers e-learning, technical document publishing, web conferencing, document and forms platform, web application development, printing, and Adobe Advertising solutions. It also provides consulting, training, customer management, technical support, and learning services. The company offers its solutions to enterprise customers, and businesses and consumers; and licenses its products to end-user customers through app stores and website at adobe.com. It markets and distributes its products through distributors, retailers, software developers, mobile app stores, systems integrators, independent software vendors, value-added resellers, and original equipment and hardware manufacturers. The company also provides an online visibility management and content marketing software-as-a-service platform. The company has a strategic alliance with HUMAIN for the development of generative AI models and AI-powered applications. The company was formerly known as Adobe Systems Incorporated and changed its name to Adobe Inc. in October 2018. Adobe Inc. was founded in 1982 and is headquartered in San Jose, California.",
-    "last_updated": "2026-09-06 23:00:03"
+    "last_updated": "2026-09-07 03:08:55"
   },
   {
     "symbol": "CRM",
@@ -663,7 +663,7 @@
     "industry": "Software - Application",
     "website": "https://www.salesforce.com",
     "description": "Salesforce, Inc. provides customer relationship management technology services that connect companies and customers together in the United States, Europe, and the Asia Pacific. The company offers Agentforce, which enables customers to build, deploy, and manage enterprise-grade, autonomous AI agents at scale, enabling humans and agents to work together; Agentforce Sales, an integrated platform that brings together the power of humans with AI agents to help sales teams for selling, managing, and automating entire sales processes; Agentforce Service, which enables companies in every industry to bring all of their customer, employee, IT, and field service needs onto one integrated AI-powered platform; Data 360, a data engine that gives AI agents their context and serves as the foundation for how customers unify service offerings, making their data actionable for both humans and agents; Informatica, an AI-powered data management platform that enables customers to discover, integrate, govern, and deliver trusted data at scale across hybrid and multi-cloud environments; and Slack, a conversational interface for the agentic enterprise where people and agents work together, connecting knowledge, actions, and data in real time. It also provides marketing platforms; commerce services, which empower shopping experiences across various customer touchpoints; integration and analytics solutions; Salesforce Starter, a suite for small and medium-sized businesses that brings sales, service, marketing, and commerce together; and a field service solution that enables companies to connect service agents, dispatchers, and mobile employees through one centralized platform to schedule and dispatch work, as well as track and manage jobs. It serves financial services, healthcare and life sciences, manufacturing, automotive, and government sectors. Salesforce, Inc. was incorporated in 1999 and is headquartered in San Francisco, California.",
-    "last_updated": "2026-09-06 23:00:07"
+    "last_updated": "2026-09-07 03:08:58"
   },
   {
     "symbol": "INTC",
@@ -673,7 +673,7 @@
     "open": 92.36,
     "day_high": 95.94,
     "day_low": 91.8701,
-    "volume": 97018400,
+    "volume": 97654325,
     "avg_volume": 113772338,
     "market_cap": 506408894464,
     "pe_ratio": "N/A",
@@ -700,7 +700,7 @@
     "industry": "Semiconductors",
     "website": "https://www.intel.com",
     "description": "Intel Corporation designs, develops, manufactures, markets, sells, and services computing and related end products and services in the United States, Ireland, Israel, and internationally. It operates through three segments: CCG, DCAI, and Intel Foundry. The company offers client computing group products, including client and commercial CPUs, discrete client GPUs, edge computing, and connectivity products; data center and AI products, such as server CPUs, discrete GPUs, and networking products; and semiconductors comprising wafer fabrication, substrates, and other related products and services. It also provides driving assistance and self-driving solutions; and develops and manufactures multi-beam mask writing tools. The company sells its products through sales organizations, distributors, resellers, retailers, and OEM partners. It serves original equipment manufacturers, original design manufacturers, cloud service providers, and other manufacturers and service providers. Intel Corporation has a strategic collaboration with Infosys Limited to develop a multi-layer AI fabric that unifies infrastructure, models, data, applications, and workflows into a composable and agent-ready ecosystem. The company was incorporated in 1968 and is headquartered in Santa Clara, California.",
-    "last_updated": "2026-09-06 23:00:10"
+    "last_updated": "2026-09-07 03:09:02"
   },
   {
     "symbol": "AMD",
@@ -710,7 +710,7 @@
     "open": 462.0,
     "day_high": 478.83,
     "day_low": 458.0,
-    "volume": 19364684,
+    "volume": 19678742,
     "avg_volume": 26151144,
     "market_cap": 779621105664,
     "pe_ratio": 121.82908,
@@ -737,6 +737,154 @@
     "industry": "Semiconductors",
     "website": "https://www.amd.com",
     "description": "Advanced Micro Devices, Inc. operates as a semiconductor company internationally. It operates in three segments: Data Center, Client and Gaming, and Embedded. The company offers artificial intelligence (AI) accelerators, microprocessors, and graphics processing units (GPUs) as standalone devices or as incorporated into accelerated processing units, chipsets, and data center and professional GPUs; and embedded processors and semi-custom system-on-chip (SoC) products, microprocessor and SoC development services and technology, data processing units, field programmable gate arrays (FPGA), system on modules, AI network interface cards, and adaptive SoC products. It provides processors under the AMD Ryzen, AMD Ryzen AI, AMD Ryzen PRO, AMD Ryzen Threadripper, AMD Ryzen Threadripper PRO, AMD Athlon, and AMD PRO A-Series brands; graphics under the AMD Radeon graphics and AMD Embedded Radeon graphics; professional graphics under the AMD Radeon Pro graphics brand; and AI and general-purpose compute infrastructure for hyperscale providers. The company offers data center graphics under the AMD Instinct accelerators and Radeon PRO V-series brands; server microprocessors under the AMD EPYC brand; low power solutions under the AMD Athlon, AMD Geode, AMD Ryzen, AMD EPYC, and AMD R-Series and G-Series brands; FPGA products under the Virtex-6, Virtex-7, Virtex UltraScale+, Kintex-7, Kintex UltraScale, Kintex UltraScale+, Artix-7, Artix UltraScale+, Spartan-6, and Spartan-7 brands; adaptive SOCs under the Zynq-7000, Zynq UltraScale+ MPSoC, Zynq UltraScale+ RFSoCs, Versal HBM, Versal Premium, Versal Prime, Versal AI Core, Versal AI Edge, Vitis, and Vivado brands; and compute and network acceleration board products under the Alveo and Pensando brands. It serves original equipment and design manufacturers, public cloud service providers, system integrators, distributors, and add-in-board manufacturers. The company was incorporated in 1969 and is headquartered in Santa Clara, California.",
-    "last_updated": "2026-09-06 23:00:14"
+    "last_updated": "2026-09-07 03:09:05"
+  },
+  {
+    "symbol": "AXON",
+    "company_name": "Axon Enterprise, Inc.",
+    "current_price": 515.67,
+    "previous_close": 538.15,
+    "open": 531.21,
+    "day_high": 532.4,
+    "day_low": 514.27,
+    "volume": 649667,
+    "avg_volume": 961731,
+    "market_cap": 41891696640,
+    "pe_ratio": 213.08676,
+    "forward_pe": 48.835297,
+    "eps": 2.42,
+    "52_week_high": 792.16,
+    "52_week_low": 339.01,
+    "beta": 1.399,
+    "dividend_yield": "N/A",
+    "profit_margin": 0.06191,
+    "operating_margin": 0.0517,
+    "roe": 0.06221,
+    "roa": 0.00509,
+    "debt_to_equity": 50.363,
+    "current_ratio": 2.149,
+    "book_value": 45.233,
+    "price_to_book": 11.400304,
+    "earnings_growth": -0.182,
+    "shares_outstanding": 81237415,
+    "total_revenue": 3219098880,
+    "enterprise_value": 43049771008,
+    "ebitda": 165106000,
+    "sector": "Industrials",
+    "industry": "Aerospace & Defense",
+    "website": "https://www.axon.com",
+    "description": "Axon Enterprise, Inc. provides public safety technology solutions in the United States and internationally. The company operates in two segments, Software and Services, and Connected Devices. The Software and Services segment develops, manufactures, and sells cloud-based software-as-a-service solutions to capture, store, manage, share, and analyze video and other digital evidence. This segment also offers Axon Evidence, Draft One, Axon Records, Axon Standards, Axon Fusus, Axon Assistant, and others. The Connected Devices segment engages in the development, manufacture, and sale of integrated hardware solutions, such as conducted energy devices under the TASER brand, body cameras, fixed and in-car cameras, drone and counter-drone technologies, accessories, extended warranties, and related hardware products, as well as virtual reality training hardware. The company serves first responders across international, federal, state, and local governments, international governmental entities, commercial enterprises, and consumers through direct sales, distribution partners, and third-party resellers. The company was formerly known as TASER International, Inc. and changed its name to Axon Enterprise, Inc. in April 2017. Axon Enterprise, Inc. was incorporated in 1993 and is headquartered in Scottsdale, Arizona.",
+    "last_updated": "2026-09-07 03:09:09"
+  },
+  {
+    "symbol": "PLTR",
+    "company_name": "Palantir Technologies Inc.",
+    "current_price": 174.33,
+    "previous_close": 182.53,
+    "open": 180.02,
+    "day_high": 182.19,
+    "day_low": 173.67,
+    "volume": 27963048,
+    "avg_volume": 40826409,
+    "market_cap": 418925182976,
+    "pe_ratio": 149.0,
+    "forward_pe": 74.94938,
+    "eps": 1.17,
+    "52_week_high": 207.52,
+    "52_week_low": 106.37,
+    "beta": 1.621,
+    "dividend_yield": "N/A",
+    "profit_margin": 0.49005002,
+    "operating_margin": 0.47120997,
+    "roe": 0.38097,
+    "roa": 0.17292999,
+    "debt_to_equity": 2.139,
+    "current_ratio": 7.228,
+    "book_value": 4.068,
+    "price_to_book": 42.853985,
+    "earnings_growth": 2.154,
+    "shares_outstanding": 2300713329,
+    "total_revenue": 6155940864,
+    "enterprise_value": 409838190592,
+    "ebitda": 2662629888,
+    "sector": "Technology",
+    "industry": "Software - Infrastructure",
+    "website": "https://www.palantir.com",
+    "description": "Palantir Technologies Inc. builds and deploys software platforms for the intelligence community to assist in counterterrorism investigations and operations in the United States, the United Kingdom, and internationally. It provides Palantir Gotham integrates with other platforms for defense offerings which enables users to see, understand, and act in the modern battlespace; operations centers to the tactical edge; integrating data from domains and sensors in near real-time; and situational awareness and accelerating operational decision-making, as well as facilitates the hand-off between analysts and operational users, helping operators plan and execute real-world responses to threats that have been identified within the platform. It also offers Palantir Foundry, a platform that helps organizations operate by creating a central operating system for their data; and allows individual users to integrate and analyze the data they need in one place. In addition, it provides Palantir Apollo, a software that delivers software and updates across the business, as well as enables customers to deploy their software virtually in any environment; and Palantir Artificial Intelligence Platform that provides unified access to open-source, self-hosted, and commercial large language models (LLMs) that can transform structured and unstructured data into LLM-understandable objects and can turn organizations' actions and processes into tools for humans and LLM-driven agents. The company also has a strategic partnership with Ondas Inc. to develop and deploy AI-enabled operational capabilities to scale stratospheric, aerial, and land-based ISR missions. The company has a strategic collaboration with NVIDIA to deliver an intelligent engine for running NVIDIA AI and Nemotron open models in sovereign environments and with PwC to transform critical business operations and deliver measurable enterprise value. The company was incorporated in 2003 and is headquartered in Aventura, Florida.",
+    "last_updated": "2026-09-07 03:09:12"
+  },
+  {
+    "symbol": "ANET",
+    "company_name": "Arista Networks, Inc.",
+    "current_price": 193.78,
+    "previous_close": 191.44,
+    "open": 192.82,
+    "day_high": 197.1,
+    "day_low": 190.56,
+    "volume": 4190753,
+    "avg_volume": 7405158,
+    "market_cap": 244400128000,
+    "pe_ratio": 61.322784,
+    "forward_pe": 37.552223,
+    "eps": 3.16,
+    "52_week_high": 214.89,
+    "52_week_low": 114.52,
+    "beta": 1.617,
+    "dividend_yield": "N/A",
+    "profit_margin": 0.38371,
+    "operating_margin": 0.45393002,
+    "roe": 0.31476,
+    "roa": 0.14119,
+    "debt_to_equity": "N/A",
+    "current_ratio": 2.957,
+    "book_value": 11.733,
+    "price_to_book": 16.51581,
+    "earnings_growth": 0.357,
+    "shares_outstanding": 1261224648,
+    "total_revenue": 10540800000,
+    "enterprise_value": 231056818176,
+    "ebitda": 4639600128,
+    "sector": "Technology",
+    "industry": "Computer Hardware",
+    "website": "https://www.arista.com",
+    "description": "Arista Networks, Inc. engages in the development, marketing, and sale of data-driven, client to cloud networking solutions for AI, data center, campus, and routing environments in the Americas, Europe, the Middle East, Africa, and the Asia-Pacific. Its cloud networking solutions consist of Extensible Operating System (EOS), a publish-subscribe state-sharing networking operating system offered in combination with a set of network applications. The company offers data center, cloud and AI networking, cognitive adjacencies, and cognitive network software and services. It also provides post contract customer support services, such as technical support, hardware repair and replacement parts beyond standard warranty, bug fixes, patches, and upgrade services. The company serves a range of industries comprising internet companies, cloud service providers, financial services organizations, government agencies, media and entertainment, healthcare, oil and gas, education, manufacturing, industrial, and others. It markets and sells its products through distributors, system integrators, value-added resellers, and original equipment manufacturer partners, as well as through its direct sales force. Arista Networks, Inc. was formerly known as Arastra, Inc. and changed its name to Arista Networks, Inc. in October 2008. The company was incorporated in 2004 and is headquartered in Santa Clara, California.",
+    "last_updated": "2026-09-07 03:09:15"
+  },
+  {
+    "symbol": "ONON",
+    "company_name": "On Holding AG",
+    "current_price": 27.99,
+    "previous_close": 28.36,
+    "open": 27.8,
+    "day_high": 28.3577,
+    "day_low": 27.8,
+    "volume": 6183139,
+    "avg_volume": 6205271,
+    "market_cap": 9354669056,
+    "pe_ratio": 19.303448,
+    "forward_pe": 13.501952,
+    "eps": 1.45,
+    "52_week_high": 51.08,
+    "52_week_low": 27.56,
+    "beta": 2.084,
+    "dividend_yield": "N/A",
+    "profit_margin": 0.12303001,
+    "operating_margin": 0.14019,
+    "roe": 0.23951,
+    "roa": 0.0958,
+    "debt_to_equity": 29.429,
+    "current_ratio": 2.831,
+    "book_value": 7.0593047,
+    "price_to_book": 3.9649796,
+    "earnings_growth": "N/A",
+    "shares_outstanding": 301715535,
+    "total_revenue": 3220400128,
+    "enterprise_value": 8677769216,
+    "ebitda": 490400000,
+    "sector": "Consumer Cyclical",
+    "industry": "Footwear & Accessories",
+    "website": "https://www.on.com",
+    "description": "On Holding AG, together with its subsidiaries, develops and distributes performance sports products under the On brand in Switzerland, the rest of Europe, the Middle East, Africa, the United States, the rest of the Americas, and the Asia-Pacific. The company offers athletic footwear, apparel, and accessories for performance running, performance outdoor, performance all day, performance training, performance tennis, and young movers. It sells its products to athletes and active customers through wholesale and direct-to-consumer channels; run specialty, general sporting goods, outdoor, luxury, street fashion, and lifestyle retailers; owned retail stores; and e-commerce platforms. On Holding AG was founded in 2010 and is headquartered in Zurich, Switzerland.",
+    "last_updated": "2026-09-07 03:09:19"
   }
 ]
