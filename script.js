@@ -4,6 +4,8 @@ class StaticStockAnalyzer {
         this.watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
         this.availableStocks = [];
         this.masterData = null; // now sourced from data/manifest.json, not master_data.csv
+        this.priceChartInstance = null;
+        this.volumeChartInstance = null;
         this.init();
     }
 
@@ -191,9 +193,18 @@ class StaticStockAnalyzer {
         const prices = historicalData.map(row => parseFloat(row.Close));
         const volumes = historicalData.map(row => parseFloat(row.Volume));
 
+        // Destroy previous chart instances before recreating — Chart.js throws
+        // "Canvas is already in use" if you call new Chart() on a canvas that
+        // still has a live chart attached, which is exactly what happened every
+        // time a second ticker was loaded: this threw, got caught by the
+        // generic try/catch in loadStaticData(), and silently aborted everything
+        // after it (frameworkSelector/Graham never re-ran).
+        if (this.priceChartInstance) this.priceChartInstance.destroy();
+        if (this.volumeChartInstance) this.volumeChartInstance.destroy();
+
         // Create price chart
         const priceCtx = document.getElementById('priceChart').getContext('2d');
-        new Chart(priceCtx, {
+        this.priceChartInstance = new Chart(priceCtx, {
             type: 'line',
             data: {
                 labels: labels,
@@ -217,7 +228,7 @@ class StaticStockAnalyzer {
 
         // Create volume chart
         const volumeCtx = document.getElementById('volumeChart').getContext('2d');
-        new Chart(volumeCtx, {
+        this.volumeChartInstance = new Chart(volumeCtx, {
             type: 'bar',
             data: {
                 labels: labels,
