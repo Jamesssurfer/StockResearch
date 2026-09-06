@@ -14,20 +14,9 @@ class StaticStockAnalyzer {
     }
 
     setupEventListeners() {
-        const searchInput = document.getElementById('searchInput');
-
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.loadStaticData();
-            }
-        });
-
-        const searchBtn = document.querySelector('.search-btn');
-        if (searchBtn) {
-            searchBtn.addEventListener('click', () => {
-                this.loadStaticData();
-            });
-        }
+        // No search input anymore — navigation is entirely via the ticker
+        // buttons rendered in renderAvailableStocks() / renderWatchlist(),
+        // both of which call quickLoad(symbol) directly.
     }
 
     // Replaces the old loadMasterData() that read data/master_data.csv.
@@ -70,10 +59,10 @@ class StaticStockAnalyzer {
         return XLSX.utils.sheet_to_json(sheet, { defval: '' });
     }
 
-    async loadStaticData() {
-        const symbol = document.getElementById('searchInput').value.trim().toUpperCase();
+    async loadStaticData(symbol) {
+        symbol = (symbol || '').trim().toUpperCase();
         if (!symbol) {
-            alert('Please enter a stock symbol');
+            console.warn('loadStaticData called without a symbol');
             return;
         }
 
@@ -91,13 +80,18 @@ class StaticStockAnalyzer {
                 throw new Error(`No historical data found for ${symbol}`);
             }
 
+            const balanceSheetLatest = this.extractBalanceSheetLatest(workbook);
+
             this.currentStock = {
                 symbol: symbol,
                 metrics: metrics,
-                historicalData: historicalData
+                historicalData: historicalData,
+                balanceSheetLatest: balanceSheetLatest
             };
 
             this.displayStockData();
+            this.renderFrameworkSelector();
+            if (window.analyzeGraham) this.selectFramework('Graham');
 
         } catch (error) {
             console.error('Error loading data:', error);
@@ -138,12 +132,12 @@ class StaticStockAnalyzer {
         // Display charts
         this.displayCharts(stock.historicalData);
 
-        // Display framework placeholder
+        // Framework content is populated by renderFrameworkSelector()/selectFramework()
+        // right after this call returns. This is just the pre-selection placeholder.
         document.getElementById('frameworkContent').innerHTML = `
             <div class="verdict neutral">
-                <strong>📊 Data loaded from static files</strong>
+                <strong>📊 Data loaded — pick a framework above</strong>
                 <p>Last updated: ${metrics.last_updated || 'N/A'}</p>
-                <p>This is static data. Run the Python script to update.</p>
             </div>
         `;
     }
@@ -246,15 +240,102 @@ class StaticStockAnalyzer {
         if (!container) return;
 
         container.innerHTML = this.availableStocks.map(symbol => `
-            <div class="stock-chip" onclick="analyzer.quickLoad('${symbol}')">
+            <button id="chip-${symbol}" class="stock-chip" onclick="analyzer.quickLoad('${symbol}')">
                 ${symbol}
-            </div>
+            </button>
         `).join('');
     }
 
-    quickLoad(symbol) {
-        document.getElementById('searchInput').value = symbol;
-        this.loadStaticData();
+    // Pulls the fields Graham's NCAV calc needs out of the Balance_Sheet sheet.
+    // yfinance's balance_sheet DataFrame has line-item labels as the index and
+    // report dates as columns; after round-tripping through to_dict()/to_excel(),
+    // SheetJS gives us rows keyed by the label column (header is blank, so SheetJS
+    // names it "__EMPTY") plus one column per date string. Label wording is not
+    // perfectly stable across tickers/yfinance versions, hence the alias lists
+    // and the 'N/A' fallback rather than throwing.
+    extractBalanceSheetLatest(workbook) {
+        const rows = this.sheetToRows(workbook, 'Balance_Sheet');
+        const result = { currentAssets: 'N/A', currentLiabilities: 'N/A', totalLiabilities: 'N/A' };
+        if (!rows.length) return result;
+
+        const labelKey = Object.keys(rows[0]).find(k => k === '' || k.startsWith('__EMPTY')) || Object.keys(rows[0])[0];
+        const dateCols = Object.keys(rows[0]).filter(k => k !== labelKey);
+        if (!dateCols.length) return result;
+
+        // Pick the most recent report column by parsing each header as a date;
+        // yfinance usually orders columns most-recent-first, but don't rely on it.
+        const latestCol = dateCols.reduce((latest, col) => {
+            const d = new Date(col);
+            const bestD = new Date(latest);
+            return (!isNaN(d) && (isNaN(bestD) || d > bestD)) ? col : latest;
+        }, dateCols[0]);
+
+        const aliases = {
+            currentAssets: ['current assets'],
+            currentLiabilities: ['current liabilities'],
+            totalLiabilities: ['total liabilities net minority interest', 'total liab']
+        };
+
+        rows.forEach(row => {
+            const label = String(row[labelKey] || '').toLowerCase();
+            for (const [field, names] of Object.entries(aliases)) {
+                if (names.some(n => label === n || label.includes(n))) {
+                    const val = parseFloat(row[latestCol]);
+                    if (!isNaN(val)) result[field] = val;
+                }
+            }
+        });
+
+        return result;
+    }
+
+    // Framework registry: maps a display name to the global analyze function
+    // each frameworks/*.js file attaches to window. Only entries with a
+    // non-null fn are wired up and clickable — the rest render as
+    // "coming soon" until they're rebuilt one at a time.
+    getFrameworkRegistry() {
+        return [
+            { name: 'Graham', fn: window.analyzeGraham || null },
+            { name: 'Buffett', fn: null },
+            { name: 'Lynch', fn: null },
+            { name: 'Magic Formula', fn: null },
+            { name: "Acquirer's Multiple", fn: null },
+            { name: 'Piotroski', fn: null },
+            { name: "O'Neil CANSLIM", fn: null },
+            { name: 'Minervini', fn: null },
+            { name: 'Fama-French', fn: null },
+            { name: 'Black-Scholes', fn: null }
+        ];
+    }
+
+    renderFrameworkSelector() {
+        const container = document.getElementById('frameworkSelector');
+        if (!container) return;
+
+        container.innerHTML = this.getFrameworkRegistry().map(fw => `
+            <button
+                class="framework-tab ${fw.fn ? '' : 'disabled'}"
+                ${fw.fn ? `onclick="analyzer.selectFramework('${fw.name}')"` : 'disabled'}
+                title="${fw.fn ? '' : 'Coming soon'}"
+            >${fw.name}</button>
+        `).join('');
+    }
+
+    selectFramework(name) {
+        const fw = this.getFrameworkRegistry().find(f => f.name === name);
+        const target = document.getElementById('frameworkContent');
+        if (!fw || !fw.fn || !this.currentStock) return;
+
+        document.querySelectorAll('.framework-tab').forEach(el => el.classList.remove('active'));
+        const btn = Array.from(document.querySelectorAll('.framework-tab')).find(el => el.textContent.trim() === name);
+        if (btn) btn.classList.add('active');
+
+        target.innerHTML = fw.fn(this.currentStock);
+    }
+        this.loadStaticData(symbol);
+        document.querySelectorAll('.stock-chip.active').forEach(el => el.classList.remove('active'));
+        const chip = document.getElementById(`chip-${symbol}`);
+        if (chip) chip.classList.add('active');
     }
 
     renderWatchlist() {
