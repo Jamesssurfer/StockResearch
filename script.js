@@ -276,9 +276,23 @@ class StaticStockAnalyzer {
     }
 
     findRowValue(rows, labelKey, col, aliases) {
+        // Two-pass: an exact label match anywhere in the sheet wins over a
+        // substring match, even one that appears earlier in the sheet.
+        // yfinance's income statement has multiple rows containing "net
+        // income" (Net Income, Net Income Common Stockholders, Net Income
+        // Continuous Operations, Net Income Including Noncontrolling
+        // Interests...) — picking whichever comes first in sheet order was
+        // silently grabbing the wrong line for some tickers.
         for (const row of rows) {
             const label = String(row[labelKey] || '').toLowerCase();
-            if (aliases.some(a => label === a || label.includes(a))) {
+            if (aliases.includes(label)) {
+                const v = parseFloat(row[col]);
+                if (!isNaN(v)) return v;
+            }
+        }
+        for (const row of rows) {
+            const label = String(row[labelKey] || '').toLowerCase();
+            if (aliases.some(a => label.includes(a))) {
                 const v = parseFloat(row[col]);
                 if (!isNaN(v)) return v;
             }
@@ -326,38 +340,22 @@ class StaticStockAnalyzer {
     // perfectly stable across tickers/yfinance versions, hence the alias lists
     // and the 'N/A' fallback rather than throwing.
     extractBalanceSheetLatest(workbook) {
-        const rows = this.sheetToRows(workbook, 'Balance_Sheet');
+        const sheet = this.getSheetPeriods(workbook, 'Balance_Sheet');
         const result = { currentAssets: 'N/A', currentLiabilities: 'N/A', totalLiabilities: 'N/A', netFixedAssets: 'N/A' };
-        if (!rows.length) return result;
+        if (!sheet.cols.length) return result;
 
-        const labelKey = Object.keys(rows[0]).find(k => k === '' || k.startsWith('__EMPTY')) || Object.keys(rows[0])[0];
-        const dateCols = Object.keys(rows[0]).filter(k => k !== labelKey);
-        if (!dateCols.length) return result;
-
-        // Pick the most recent report column by parsing each header as a date;
-        // yfinance usually orders columns most-recent-first, but don't rely on it.
-        const latestCol = dateCols.reduce((latest, col) => {
-            const d = new Date(col);
-            const bestD = new Date(latest);
-            return (!isNaN(d) && (isNaN(bestD) || d > bestD)) ? col : latest;
-        }, dateCols[0]);
-
-        const aliases = {
+        const latestCol = sheet.cols[0]; // getSheetPeriods already sorts most-recent-first
+        const aliasMap = {
             currentAssets: ['current assets'],
             currentLiabilities: ['current liabilities'],
             totalLiabilities: ['total liabilities net minority interest', 'total liab'],
             netFixedAssets: ['net ppe']
         };
 
-        rows.forEach(row => {
-            const label = String(row[labelKey] || '').toLowerCase();
-            for (const [field, names] of Object.entries(aliases)) {
-                if (names.some(n => label === n || label.includes(n))) {
-                    const val = parseFloat(row[latestCol]);
-                    if (!isNaN(val)) result[field] = val;
-                }
-            }
-        });
+        for (const [field, aliases] of Object.entries(aliasMap)) {
+            const v = this.findRowValue(sheet.rows, sheet.labelKey, latestCol, aliases);
+            if (v !== null) result[field] = v;
+        }
 
         return result;
     }
@@ -375,9 +373,9 @@ class StaticStockAnalyzer {
             { name: "Acquirer's Multiple", fn: window.analyzeAcquirerMultiple || null },
             { name: 'Piotroski', fn: window.analyzePiotroski || null },
             { name: "O'Neil CANSLIM", fn: window.analyzeOneil || null },
-            { name: 'Minervini', fn: null },
-            { name: 'Fama-French', fn: null },
-            { name: 'Black-Scholes', fn: null }
+            { name: 'Minervini', fn: window.analyzeMinervini || null },
+            { name: 'Fama-French', fn: window.analyzeFamaFrench || null },
+            { name: 'Black-Scholes', fn: window.analyzeBlackScholes || null }
         ];
     }
 
