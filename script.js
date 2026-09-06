@@ -332,6 +332,7 @@ class StaticStockAnalyzer {
 
         target.innerHTML = fw.fn(this.currentStock);
     }
+    quickLoad(symbol) {
         this.loadStaticData(symbol);
         document.querySelectorAll('.stock-chip.active').forEach(el => el.classList.remove('active'));
         const chip = document.getElementById(`chip-${symbol}`);
