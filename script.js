@@ -266,7 +266,7 @@ class StaticStockAnalyzer {
     // and the 'N/A' fallback rather than throwing.
     extractBalanceSheetLatest(workbook) {
         const rows = this.sheetToRows(workbook, 'Balance_Sheet');
-        const result = { currentAssets: 'N/A', currentLiabilities: 'N/A', totalLiabilities: 'N/A' };
+        const result = { currentAssets: 'N/A', currentLiabilities: 'N/A', totalLiabilities: 'N/A', netFixedAssets: 'N/A' };
         if (!rows.length) return result;
 
         const labelKey = Object.keys(rows[0]).find(k => k === '' || k.startsWith('__EMPTY')) || Object.keys(rows[0])[0];
@@ -284,7 +284,8 @@ class StaticStockAnalyzer {
         const aliases = {
             currentAssets: ['current assets'],
             currentLiabilities: ['current liabilities'],
-            totalLiabilities: ['total liabilities net minority interest', 'total liab']
+            totalLiabilities: ['total liabilities net minority interest', 'total liab'],
+            netFixedAssets: ['net ppe']
         };
 
         rows.forEach(row => {
@@ -309,8 +310,8 @@ class StaticStockAnalyzer {
             { name: 'Graham', fn: window.analyzeGraham || null },
             { name: 'Buffett', fn: window.analyzeBuffett || null },
             { name: 'Lynch', fn: window.analyzeLynch || null },
-            { name: 'Magic Formula', fn: null },
-            { name: "Acquirer's Multiple", fn: null },
+            { name: 'Magic Formula', fn: window.analyzeMagicFormula || null },
+            { name: "Acquirer's Multiple", fn: window.analyzeAcquirerMultiple || null },
             { name: 'Piotroski', fn: null },
             { name: "O'Neil CANSLIM", fn: null },
             { name: 'Minervini', fn: null },
