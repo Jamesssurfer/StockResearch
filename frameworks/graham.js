@@ -21,7 +21,7 @@ window.analyzeGraham = function(stock) {
         'Current Ratio': isFinite(m.current_ratio) ? Number(m.current_ratio).toFixed(2) : (m.current_ratio || 'N/A'),
         'Debt to Equity': isFinite(m.debt_to_equity) ? Number(m.debt_to_equity).toFixed(2) : (m.debt_to_equity || 'N/A'),
         'EPS Growth': isFinite(m.earnings_growth) ? `${(m.earnings_growth * 100).toFixed(2)}%` : 'N/A',
-        'Dividend Yield': isFinite(m.dividend_yield) ? `${(m.dividend_yield * 100).toFixed(2)}%` : '0%'
+        'Dividend Yield': isFinite(m.dividend_yield) ? `${Number(m.dividend_yield).toFixed(2)}%` : '0%'
     };
 
     const score = grahamCalcScore(m, grahamNumber, currentPrice, ncav);
